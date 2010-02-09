@@ -105,7 +105,6 @@ $(function() {
         'http://waytoogood.ca/wp-content/gallery/inspiration/c52d1c18b02ceca2f3398ecb24851261_l.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/1238997252979083.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/1254078432801366.jpg',
-        'http://static.jquery.com/files/rocker/images/logo_jquery_215x53.gif',
         'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kwc5flabuv1qa1zngo1_500_large.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/1246811539591344.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/4247965533_a94e3603f0_b.jpg',
@@ -163,20 +162,21 @@ var layoutProps = {
 };
 
 function addItem(url) {
+    var image = new Image();
+    $(image).attr({
+        src: url,
+        alt: 'Collection Item'
+    });
+    $(image).load(loadImage);
+}
+
+function loadImage() {
+
     var domItem = $('<div>', {
         'class': 'item',
-        css: {
-            //add it off screen so it will lay out the size
-            top: document.body.clientHeight + 'px',
-            left: document.body.clientWidth + 'px'
-        }
-    }).append($('<img>', {
-        src: url,
-        alt: 'Collection item'
-    }));
+    }).append($(this));
 
     var body = $('body');
-    body.append(domItem);
 
     var w = body.data('window');
 
@@ -185,9 +185,8 @@ function addItem(url) {
         bottom: 0,
         left: 0,
         right: 0,
-        width: domItem.width(),
-        height: domItem.height()
-
+        width: this.width,
+        height: this.height
     }
 
     if(w.direction == '') {
@@ -259,11 +258,12 @@ function addItem(url) {
         w.lastEdge = item[directionProps[w.direction].expand];
     }
 
-    domItem.css('top', item.top + w.offsetY);
-    domItem.css('left', item.left + w.offsetX);
+    domItem.css('top', item.top + w.offsetY + 'px');
+    domItem.css('left', item.left + w.offsetX +'px');
     domItem.data('top', item.top);
     domItem.data('left', item.left);
 
+    body.append(domItem);
     body.data('window', w);
 
 }
