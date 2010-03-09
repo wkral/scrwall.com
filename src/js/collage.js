@@ -173,7 +173,7 @@ function addItem(url) {
 function loadImage() {
 
     var domItem = $('<div>', {
-        'class': 'item',
+        'class': 'item'
     }).append($(this));
 
     var body = $('body');

@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+      <title>Red Black Tree test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <link rel="stylesheet" href="http://github.com/jquery/qunit/raw/master/qunit/qunit.css" type="text/css" media="screen" />
+    <script type="text/javascript" src="http://github.com/jquery/qunit/raw/master/qunit/qunit.js"></script>
+    <script type="text/javascript" src="../js/rb-tree.js"></script>
+    <script type="text/javascript">
+test('Constructor', function() {
+    var tree = new SortedTree();
+    ok(tree.head == null, 'New tree without a head');
+});
+
+test('Insert first item', function() {
+    var tree = new SortedTree();
+    tree.put(5, 'hello');
+    ok(tree.head.right == null, 'head with no right');
+    ok(tree.head.left == null, 'head with no left');
+    equals(tree.head.key, 5, 'correct key found');
+    equals(tree.head.value, 'hello', 'correct value found');
+});
+test('Insert two items second smaller', function() {
+    var tree = new SortedTree();
+    tree.put(5, 'hello');
+    tree.put(2, 'goodbye');
+    ok(tree.head.right == null, 'inserted on correct side');
+    equals(tree.head.left.key, 2, 'new key found');
+    equals(tree.head.left.value, 'goodbye', 'new value found');
+    ok(!tree.head.left.black, 'red node');
+    equals(tree.head.key, 5, 'old key found');
+    equals(tree.head.value, 'hello', 'old value found');
+    ok(tree.head.black, 'black head');
+});
+test('Insert two items second larger', function() {
+    var tree = new SortedTree();
+    tree.put(5, 'hello');
+    tree.put(7, 'goodbye');
+    ok(tree.head.left == null, 'inserted on correct side');
+    equals(tree.head.right.key, 7, 'new key found');
+    equals(tree.head.right.value, 'goodbye', 'new value found');
+    ok(!tree.head.right.black, 'red node');
+    equals(tree.head.key, 5, 'old key found');
+    equals(tree.head.value, 'hello', 'old value found');
+    ok(tree.head.black, 'black head');
+});
+test('Get the items out', function() {
+    var tree = new SortedTree();
+    tree.put(5, 'hello');
+    tree.put(2, 'goodbye');
+    tree.put(7, 'seeya');
+    equals(tree.get(5), 'hello', 'correct value for key 5');
+    equals(tree.get(2), 'goodbye', 'correct value for key 2');
+    equals(tree.get(7), 'seeya', 'correct value for key 7');
+});
+test('Insert Balance', function() {
+    var tree = new SortedTree();
+    tree.put(1, 'one');
+    tree.put(2, 'two');
+    tree.put(3, 'three');
+    tree.put(5, 'five');
+    tree.put(4, 'four');
+    tree.put(7, 'seven');
+    tree.put(6, 'six');
+    equals(_depth(tree.head), 4, 'tree depth');
+    equals(tree.head.key, 2, 'new head');
+});
+    </script>
+  </head>
+  <body>
+      <h1 id="qunit-header">Red Black Tree test</h1>
+      <h2 id="qunit-banner"></h2>
+      <h2 id="qunit-userAgent"></h2>
+      <ol id="qunit-tests"></ol>
+  </body>
+</html>
