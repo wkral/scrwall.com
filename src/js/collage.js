@@ -56,17 +56,24 @@ var nextDirection = {'right' : 'down',
                      'down' : 'left',
                      'left' : 'up',
                      'up' : 'right'};
+$(window).resize(function(e) {
+    $('#cover').css({
+        height: document.body.clientHeight + 'px',
+        width: document.body.clientWidth + 'px'
+    });
+});
 
 $(function() {
     var body = $('body');
     var cover = $('<div>', {
+        id: 'cover',
         css: {
             height: document.body.clientHeight + 'px',
             width: document.body.clientWidth +'px',
             'z-index': 1000,
             position: 'absolute'
         },
-        click: stopEvent,
+        //click: stopEvent,
         mousedown: startDrag,
         mouseout: stopDrag,
         mouseup: stopDrag,
@@ -99,18 +106,11 @@ $(function() {
     
     $.each(['http://static.jquery.com/files/rocker/images/logo_jquery_215x53.gif',
         'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kx1o246h871qza6kro1_500_large.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kx2u4yr5dk1qzs56do1_500.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/killer_ring.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/enhanced_penulum_channel.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/c52d1c18b02ceca2f3398ecb24851261_l.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/1238997252979083.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/1254078432801366.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kwc5flabuv1qa1zngo1_500_large.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/1246811539591344.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/4247965533_a94e3603f0_b.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/27605bbce5a1c3f75c383967c48d1b62_l.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/1726a734e902959a7fde10d2556f5bb5_l.png',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/copy_0_yx6zgzbltnl7hn0tnkp0pqgqo1_500.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/paradise_now-2.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/a342f0c470b7535ee05ead326c1e2c3d_l.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kwuahsjxnv1qzs56do1_500.jpg',
@@ -119,10 +119,7 @@ $(function() {
         'http://waytoogood.ca/wp-content/gallery/inspiration/3140453fce7b7a8b5719c3ed49a3b53e_l.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/9eb0a9b8728ced5ce590c41b7a69f16d_l.jpg',
         'http://waytoogood.ca/wp-content/gallery/inspiration/1244249870410811.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/0e210818795129a0fce6edc182684600_l.png',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kwjkkmotmc1qzs56do1_500.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/c61_by_willow32.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kuth8g6roz1qa9gago1_1280.jpg'
+        'http://waytoogood.ca/wp-content/gallery/inspiration/0e210818795129a0fce6edc182684600_l.png'
     ],
         function () {
             addItem(this);
