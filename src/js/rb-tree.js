@@ -2,7 +2,7 @@ function SortedTree() {
     return {
         tree: this,
         put: function(k, v) {
-            var node = {black: false, key: k, value: v};
+            var node = {black: false, key: k, value: [v]};
             if(this.head == null) {
                 this.head = node;
             } else {
@@ -14,24 +14,39 @@ function SortedTree() {
             var node = _find(this.head, k);
             if(node == null) return d;
             return node.value;
+        },
+        range: function(start, finish) {
+            return _find_range(this.head, start, finish);
         }
     };
 }
 
 function _insert(t, n) {
     var side = n.key < t.key ? 'left' : 'right';
-    if(t[side] == null) {
+    if(n.key == t.key) {
+        t.value.push(n.value.pop());
+    } else if (t[side] == null) {
         t[side] = n;
         n.parent = t;
     } else
         _insert(t[side], n);
 }
 
-function _find(t, k) {
-    if(t == null || t.key == k) {
-        return t;
+function _find(n, k) {
+    if(n == null || n.key == k) {
+        return n;
     }
-    return _find(k < t.key ? t.left : t.right, k);
+    return _find(k < n.key ? n.left : n.right, k);
+}
+
+function _find_range(n, s, f) {
+    if(n == null) return [];
+    if(n.key < s) {
+        return _find_range(n.right, s, f);
+    } else if (n.key >= f) {
+        return _find_range(n.left, s, f);
+    }
+    return _find_range(n.left, s, f).concat(n.value, _find_range(n.right, s, f));
 }
 
 function _depth(t, max) {

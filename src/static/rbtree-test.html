@@ -50,9 +50,9 @@ test('Get the items out', function() {
     tree.put(5, 'hello');
     tree.put(2, 'goodbye');
     tree.put(7, 'seeya');
-    equals(tree.get(5), 'hello', 'correct value for key 5');
-    equals(tree.get(2), 'goodbye', 'correct value for key 2');
-    equals(tree.get(7), 'seeya', 'correct value for key 7');
+    same(tree.get(5), ['hello'], 'correct value for key 5');
+    same(tree.get(2), ['goodbye'], 'correct value for key 2');
+    same(tree.get(7), ['seeya'], 'correct value for key 7');
 });
 test('Insert Balance', function() {
     var tree = new SortedTree();
@@ -65,6 +65,26 @@ test('Insert Balance', function() {
     tree.put(6, 'six');
     equals(_depth(tree.head), 4, 'tree depth');
     equals(tree.head.key, 2, 'new head');
+});
+test('Multiple values', function() {
+    var tree = new SortedTree();
+    tree.put(3, 'one');
+    tree.put(3, 'two');
+    tree.put(4, 'three');
+    same(tree.get(3), ['one', 'two'], 'two values found');
+    same(tree.get(4), ['three'], 'one value found');
+});
+test('Find range', function() {
+    var tree = new SortedTree();
+    tree.put(1, 'one');
+    tree.put(2, 'two');
+    tree.put(3, 'three');
+    tree.put(5, 'five');
+    tree.put(4, 'four');
+    tree.put(7, 'seven');
+    tree.put(6, 'six');
+    tree.put(8, 'eight');
+    same(tree.range(2,6), ['two', 'three', 'four', 'five'], 'four values in range');
 });
     </script>
   </head>
