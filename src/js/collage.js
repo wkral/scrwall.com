@@ -253,36 +253,36 @@ function addSpecial(area, item) {
 }
 
 function addNormal(area, item) {
-        var props = layoutProps[area.direction];
-        var moving = directionProps[area.direction];
-        var other = directionProps[props.other];
+    var props = layoutProps[area.direction];
+    var moving = directionProps[area.direction];
+    var other = directionProps[props.other];
 
-        //Assign new top and left based on previous state
-        /* moving right -> inner top = bottom edge
-           moving down  -> inner right = left edge
-           moving left  -> inner bottom = top edge
-           moving up    -> inner left = right edge */
-        item[moving.anchor] = funcs[moving.func](area.lastEdge, MARGIN);
-        item[other.anchor] = funcs[other.func](area[other.expand].inner, MARGIN);
-        item[moving.expand] = setExpantionEdge(item, moving);
-        item[other.expand] = setExpantionEdge(item, other);
+    //Assign new top and left based on previous state
+    /* moving right -> inner top = bottom edge
+       moving down  -> inner right = left edge
+       moving left  -> inner bottom = top edge
+       moving up    -> inner left = right edge */
+    item[moving.anchor] = funcs[moving.func](area.lastEdge, MARGIN);
+    item[other.anchor] = funcs[other.func](area[other.expand].inner, MARGIN);
+    item[moving.expand] = setExpantionEdge(item, moving);
+    item[other.expand] = setExpantionEdge(item, other);
 
-        // Assign new outer value if item is larger than others on that plane
-        /* follow same mapping based on direction moving */
-        if(gt[other.func](item[other.expand], area[other.expand].outer)) {
-            area[other.expand].outer = item[other.expand];
-        }
-        //Check if the border has been crossed
-        /* check the outer value of the direction its moving in */
-        if(gt[moving.func](item[moving.expand], area[moving.expand].outer)) {
-            area.direction = props.next;
-            //assign new outer value for direction moving in
-            area[moving.expand].outer = item[moving.expand];
-            //the outer becomes the inner now that we're not working on it
-            area[other.expand].inner = area[other.expand].outer;
-        }
-        //assign last edge values in the direction moving in
-        area.lastEdge = item[directionProps[area.direction].expand];
+    // Assign new outer value if item is larger than others on that plane
+    /* follow same mapping based on direction moving */
+    if(gt[other.func](item[other.expand], area[other.expand].outer)) {
+        area[other.expand].outer = item[other.expand];
+    }
+    //Check if the border has been crossed
+    /* check the outer value of the direction its moving in */
+    if(gt[moving.func](item[moving.expand], area[moving.expand].outer)) {
+        area.direction = props.next;
+        //assign new outer value for direction moving in
+        area[moving.expand].outer = item[moving.expand];
+        //the outer becomes the inner now that we're not working on it
+        area[other.expand].inner = area[other.expand].outer;
+    }
+    //assign last edge values in the direction moving in
+    area.lastEdge = item[directionProps[area.direction].expand];
 }
 function setExpantionEdge(item, dir) {
     var func = funcs[dir.func];
