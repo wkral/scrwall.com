@@ -24,7 +24,7 @@ function SortedTree() {
 function _insert(t, n) {
     var side = n.key < t.key ? 'left' : 'right';
     if(n.key == t.key) {
-        t.value.push(n.value.pop());
+        t.value = t.value.concat(n.value);
     } else if (t[side] == null) {
         t[side] = n;
         n.parent = t;
@@ -43,7 +43,7 @@ function _find_range(n, s, f) {
     if(n == null) return [];
     if(n.key < s) {
         return _find_range(n.right, s, f);
-    } else if (n.key >= f) {
+    } else if (n.key > f) {
         return _find_range(n.left, s, f);
     }
     return _find_range(n.left, s, f).concat(n.value, _find_range(n.right, s, f));

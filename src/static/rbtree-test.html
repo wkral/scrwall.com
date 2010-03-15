@@ -84,7 +84,10 @@ test('Find range', function() {
     tree.put(7, 'seven');
     tree.put(6, 'six');
     tree.put(8, 'eight');
-    same(tree.range(2,6), ['two', 'three', 'four', 'five'], 'four values in range');
+    same(tree.range(2,6), ['two', 'three', 'four', 'five', 'six'],
+        'five values in range');
+    same(tree.range(2,6), ['two', 'three', 'four', 'five', 'six'],
+        'five values in range');
 });
     </script>
   </head>

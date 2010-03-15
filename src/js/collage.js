@@ -100,9 +100,9 @@ $(function() {
         lastEdge: 0,
 
         topEdges: SortedTree(),
+        rightEdges: SortedTree(),
         bottomEdges: SortedTree(),
-        leftEdges: SortedTree(),
-        rightEdges: SortedTree()
+        leftEdges: SortedTree()
     });
 
     body.data('cursor', {
@@ -201,10 +201,10 @@ function loadImage() {
         addNormal(area, item);
     }
 
-    area.topEdges.put(item.top, item);
-    area.bottomEdges.put(item.bottom, item);
-    area.rightEdges.put(item.right, item);
     area.leftEdges.put(item.left, item);
+    area.topEdges.put(item.top, item);
+    area.rightEdges.put(item.right, item);
+    area.bottomEdges.put(item.bottom, item);
 
     domItem.css('top', item.top + area.offsetY + 'px');
     domItem.css('left', item.left + area.offsetX +'px');
@@ -212,7 +212,7 @@ function loadImage() {
     domItem.data('left', item.left);
 
     body.append(domItem);
-
+    body.data('area', area);
 }
 
 function addCenter(area, item) {
@@ -221,6 +221,8 @@ function addCenter(area, item) {
 
     item.top = -halfHeight - PADDING;
     item.left = -halfWidth - PADDING;
+    item.right = setExpantionEdge(item, directionProps['right']);
+    item.bottom = setExpantionEdge(item, directionProps['down']);
     area.top.inner = item.top;
     area.left.inner = item.left;
     //subtract to account for a potentially lost pixel in int division
@@ -240,6 +242,8 @@ function addCenter(area, item) {
 function addSpecial(area, item) {
     item.top = area.top.outer;
     item.left = area.lastEdge + MARGIN;
+    item.right = setExpantionEdge(item, directionProps['right']);
+    item.bottom = setExpantionEdge(item, directionProps['down']);
     area.right.outer = item.left + item.width + PADDING * 2;
     if(item.top + item.height + PADDING * 2 > area.bottom.outer) {
         area.lastEdge = item.left;
@@ -263,8 +267,12 @@ function addNormal(area, item) {
        moving left  -> inner bottom = top edge
        moving up    -> inner left = right edge */
     item[moving.anchor] = funcs[moving.func](area.lastEdge, MARGIN);
-    item[other.anchor] = funcs[other.func](area[other.expand].inner, MARGIN);
     item[moving.expand] = setExpantionEdge(item, moving);
+
+    var anchorItem = findAnchorEdge(area, moving, other, item[moving.anchor],
+        item[moving.expand]);
+
+    item[other.anchor] = funcs[other.func](anchorItem[other.expand], MARGIN);
     item[other.expand] = setExpantionEdge(item, other);
 
     // Assign new outer value if item is larger than others on that plane
@@ -284,6 +292,21 @@ function addNormal(area, item) {
     //assign last edge values in the direction moving in
     area.lastEdge = item[directionProps[area.direction].expand];
 }
+
+function findAnchorEdge(area, moving, other, edge1, edge2) {
+    var start = edge1 < edge2 ? edge1 : edge2 - MARGIN;
+    var end = edge1 > edge2 ? edge1 : edge2 + MARGIN;
+
+    var items = area[moving.anchor + 'Edges'].range(start, end);
+    items = items.concat(area[moving.expand + 'Edges'].range(start, end));
+
+    var item = items.reduce(function (prev, curr) {
+        return gt[other.func](prev[other.expand], curr[other.expand]) ?
+            prev : curr;
+    });
+    return item;
+}
+
 function setExpantionEdge(item, dir) {
     var func = funcs[dir.func];
     var dim = item[dir.dim] + PADDING *2;
