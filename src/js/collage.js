@@ -56,7 +56,8 @@ var nextDirection = {'right' : 'down',
                      'down' : 'left',
                      'left' : 'up',
                      'up' : 'right'};
-$(window).resize(function(e) {
+
+$(window).resize(function() {
     $('#cover').css({
         height: document.body.clientHeight + 'px',
         width: document.body.clientWidth + 'px'
@@ -95,7 +96,11 @@ $(function() {
         left: { inner: 0, outer: 0},
         right: { inner: 0, outer: 0},
         direction: '',
-        lastEdge: 0
+        lastEdge: 0,
+        topEdges: SortedTree(),
+        bottomEdges: SortedTree(),
+        leftEdges: SortedTree(),
+        rightEdges: SortedTree()
     });
 
     body.data('cursor', {

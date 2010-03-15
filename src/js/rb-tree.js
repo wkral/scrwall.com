@@ -93,24 +93,23 @@ function _check5(n, tree) {
     }
 }
 
-function _rotate(root, direction, tree) {
+function _rotate(root, rs, tree) {
 
-    var rs = direction;
     var os = rs == 'left' ? 'right' : 'left';
     var pivot = root[os];
-    var supertree = root.parent;
+    var parent = root.parent;
     root[os] = pivot[rs];
     if(pivot[rs] != null)
         pivot[rs].parent = root;
     pivot[rs] = root;
     root.parent = pivot;
-    if(supertree == null) {
+    if(parent == null) {
         tree.head = pivot;
     } else {
-        var superside = supertree.left == root ? 'left' : 'right';
-        supertree[superside] = pivot;
+        var parent_side = parent.left == root ? 'left' : 'right';
+        parent[parent_side] = pivot;
     }
-    pivot.parent = supertree;
+    pivot.parent = parent;
 
 }
 
