@@ -32,21 +32,21 @@ function drag(e) {
     var body = $('body');
     log('moving the mouse');
     var cursor = body.data('cursor');
-    var w = body.data('window');
+    var area = body.data('area');
     if(cursor.mousedown) {
         var diffX = e.pageX - cursor.x;
         var diffY = e.pageY - cursor.y;
         cursor.x = e.pageX;
         cursor.y = e.pageY;
-        w.offsetX += diffX;
-        w.offsetY += diffY;
+        area.offsetX += diffX;
+        area.offsetY += diffY;
         log(e.pageX + ', ' + e.pageY);
         $('.item').each(function() {
             var item = $(this);
             var left = item.data('left');
             var top = item.data('top');
-            item.css('left', (left + w.offsetX) + 'px');
-            item.css('top', (top + w.offsetY) + 'px');
+            item.css('left', (left + area.offsetX) + 'px');
+            item.css('top', (top + area.offsetY) + 'px');
         });
     }
     stopEvent(e);
@@ -87,7 +87,7 @@ $(function() {
 
     body.append(cover);
 
-    body.data('window', {
+    body.data('area', {
         offsetX: document.body.clientWidth / 2,
         offsetY: document.body.clientHeight / 2,
 
@@ -95,8 +95,10 @@ $(function() {
         bottom: { inner: 0, outer: 0},
         left: { inner: 0, outer: 0},
         right: { inner: 0, outer: 0},
+
         direction: '',
         lastEdge: 0,
+
         topEdges: SortedTree(),
         bottomEdges: SortedTree(),
         leftEdges: SortedTree(),
@@ -180,7 +182,7 @@ function loadImage() {
 
     var body = $('body');
 
-    var w = body.data('window');
+    var area = body.data('area');
 
     var item = {
         top: 0,
@@ -191,45 +193,68 @@ function loadImage() {
         height: this.height
     }
 
-    if(w.direction == '') {
-
-        var halfHeight = Math.floor(item.height / 2);
-        var halfWidth = Math.floor(item.width / 2);
-
-        item.top = -halfHeight - PADDING;
-        item.left = -halfWidth - PADDING;
-        w.top.inner = item.top;
-        w.left.inner = item.left;
-        //subtract to account for a potentially lost pixel in int division
-        w.bottom.inner = item.height - halfHeight + PADDING;
-        w.right.inner = item.width - halfWidth + PADDING;
-
-        w.top.outer = w.top.inner;
-        w.bottom.outer = w.bottom.inner;
-        w.left.outer = w.left.inner;
-        w.right.outer = w.right.inner;
-
-        //special case
-        w.lastEdge = w.right.outer;
-        w.direction = 'special';
-    } else if (w.direction == 'special') {
-        item.top = w.top.outer;
-        item.left = w.lastEdge + MARGIN;
-        w.right.outer = item.left + item.width + PADDING * 2;
-        if(item.top + item.height + PADDING * 2 > w.bottom.outer) {
-            w.lastEdge = item.left;
-            w.direction = 'left';
-            w.right.inner = w.right.outer;
-            w.bottom.outer = item.top + item.height + PADDING * 2;
-        } else {
-            w.lastEdge = item.top + item.height + PADDING * 2;
-            w.direction = 'down';
-        }
-
+    if(area.direction == '') {
+        addCenter(area, item);
+    } else if (area.direction == 'special') {
+        addSpecial(area, item);
     } else {
+        addNormal(area, item);
+    }
 
-        var props = layoutProps[w.direction];
-        var moving = directionProps[w.direction];
+    area.topEdges.put(item.top, item);
+    area.bottomEdges.put(item.bottom, item);
+    area.rightEdges.put(item.right, item);
+    area.leftEdges.put(item.left, item);
+
+    domItem.css('top', item.top + area.offsetY + 'px');
+    domItem.css('left', item.left + area.offsetX +'px');
+    domItem.data('top', item.top);
+    domItem.data('left', item.left);
+
+    body.append(domItem);
+
+}
+
+function addCenter(area, item) {
+    var halfHeight = Math.floor(item.height / 2);
+    var halfWidth = Math.floor(item.width / 2);
+
+    item.top = -halfHeight - PADDING;
+    item.left = -halfWidth - PADDING;
+    area.top.inner = item.top;
+    area.left.inner = item.left;
+    //subtract to account for a potentially lost pixel in int division
+    area.bottom.inner = item.height - halfHeight + PADDING;
+    area.right.inner = item.width - halfWidth + PADDING;
+
+    area.top.outer = area.top.inner;
+    area.bottom.outer = area.bottom.inner;
+    area.left.outer = area.left.inner;
+    area.right.outer = area.right.inner;
+
+    //special case
+    area.lastEdge = area.right.outer;
+    area.direction = 'special';
+}
+
+function addSpecial(area, item) {
+    item.top = area.top.outer;
+    item.left = area.lastEdge + MARGIN;
+    area.right.outer = item.left + item.width + PADDING * 2;
+    if(item.top + item.height + PADDING * 2 > area.bottom.outer) {
+        area.lastEdge = item.left;
+        area.direction = 'left';
+        area.right.inner = area.right.outer;
+        area.bottom.outer = item.top + item.height + PADDING * 2;
+    } else {
+        area.lastEdge = item.top + item.height + PADDING * 2;
+        area.direction = 'down';
+    }    
+}
+
+function addNormal(area, item) {
+        var props = layoutProps[area.direction];
+        var moving = directionProps[area.direction];
         var other = directionProps[props.other];
 
         //Assign new top and left based on previous state
@@ -237,39 +262,28 @@ function loadImage() {
            moving down  -> inner right = left edge
            moving left  -> inner bottom = top edge
            moving up    -> inner left = right edge */
-        item[moving.anchor] = funcs[moving.func](w.lastEdge, MARGIN);
-        item[other.anchor] = funcs[other.func](w[other.expand].inner, MARGIN);
+        item[moving.anchor] = funcs[moving.func](area.lastEdge, MARGIN);
+        item[other.anchor] = funcs[other.func](area[other.expand].inner, MARGIN);
         item[moving.expand] = setExpantionEdge(item, moving);
         item[other.expand] = setExpantionEdge(item, other);
 
         // Assign new outer value if item is larger than others on that plane
         /* follow same mapping based on direction moving */
-        if(gt[other.func](item[other.expand], w[other.expand].outer)) {
-            w[other.expand].outer = item[other.expand];
+        if(gt[other.func](item[other.expand], area[other.expand].outer)) {
+            area[other.expand].outer = item[other.expand];
         }
         //Check if the border has been crossed
         /* check the outer value of the direction its moving in */
-        if(gt[moving.func](item[moving.expand], w[moving.expand].outer)) {
-            w.direction = props.next;
+        if(gt[moving.func](item[moving.expand], area[moving.expand].outer)) {
+            area.direction = props.next;
             //assign new outer value for direction moving in
-            w[moving.expand].outer = item[moving.expand];
+            area[moving.expand].outer = item[moving.expand];
             //the outer becomes the inner now that we're not working on it
-            w[other.expand].inner = w[other.expand].outer;
+            area[other.expand].inner = area[other.expand].outer;
         }
         //assign last edge values in the direction moving in
-        w.lastEdge = item[directionProps[w.direction].expand];
-    }
-
-    domItem.css('top', item.top + w.offsetY + 'px');
-    domItem.css('left', item.left + w.offsetX +'px');
-    domItem.data('top', item.top);
-    domItem.data('left', item.left);
-
-    body.append(domItem);
-    body.data('window', w);
-
+        area.lastEdge = item[directionProps[area.direction].expand];
 }
-
 function setExpantionEdge(item, dir) {
     var func = funcs[dir.func];
     var dim = item[dir.dim] + PADDING *2;
