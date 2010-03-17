@@ -1,0 +1,39 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <title>BSP Tree Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <link rel="stylesheet" href="http://github.com/jquery/qunit/raw/master/qunit/qunit.css" type="text/css" media="screen" />
+        <script type="text/javascript" src="http://github.com/jquery/qunit/raw/master/qunit/qunit.js"></script>
+        <script type="text/javascript" src="../js/bsp-tree.js"></script>
+        <script type="text/javascript">
+
+var img1 = {top: 10, bottom: 0, left: 0, right: 10};
+var img2 = {top: 10, bottom: -10, left: 11, right: 10};
+test('Constructor', function() {
+    var tree = BSPTree();
+    ok(tree.head == null, 'New tree with no head');
+});
+test('Initial Insert', function() {
+    var tree = BSPTree();
+    tree.put({x:0, y:10}, img1);
+    same(tree.head, {x: 0, y: 10, horizontal: true, left: img1},
+        'Top edge is initial vector');
+});
+test('Insert special case', function () {
+    has_properties({x:2}, 'x');
+});
+        </script>
+    </head>
+    <body>
+        <h1 id="qunit-header">Binary Space Partition Tree Test</h1>
+        <h2 id="qunit-banner"></h2>
+        <h2 id="qunit-userAgent"></h2>
+        <ol id="qunit-tests"></ol>
+    </body>
+</html>
