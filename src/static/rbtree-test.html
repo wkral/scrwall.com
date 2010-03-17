@@ -63,7 +63,7 @@ test('Insert Balance', function() {
     tree.put(4, 'four');
     tree.put(7, 'seven');
     tree.put(6, 'six');
-    equals(_depth(tree.head), 4, 'tree depth');
+    equals(tree.depth(), 4, 'tree depth');
     equals(tree.head.key, 2, 'new head');
 });
 test('Multiple values', function() {
