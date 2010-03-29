@@ -114,8 +114,8 @@ function SpiralLayout(pad, marg) {
     }
 
     function findAnchorEdge(area, moving, other, edge1, edge2) {
-        var start = edge1 < edge2 ? edge1 : edge2 - MARGIN;
-        var end = edge1 > edge2 ? edge1 : edge2 + MARGIN;
+        var start = edge1 < edge2 ? edge1 : edge2 - margin;
+        var end = edge1 > edge2 ? edge1 : edge2 + margin;
 
         var items = area[moving.anchor + 'Edges'].range(start, end);
         items = items.concat(area[moving.expand + 'Edges'].range(start, end));
