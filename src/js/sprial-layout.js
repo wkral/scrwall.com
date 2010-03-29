@@ -89,10 +89,11 @@ function SpiralLayout(pad, marg) {
         item[moving.anchor] = funcs[moving.func](area.lastEdge, margin);
         item[moving.expand] = setExpantionEdge(item, moving);
 
-        var anchorItem = findAnchorEdge(area, moving, other, item[moving.anchor],
-            item[moving.expand]);
+        var anchorItem = findAnchorEdge(area, moving, other, 
+            item[moving.anchor], item[moving.expand]);
 
-        item[other.anchor] = funcs[other.func](anchorItem[other.expand], margin);
+        item[other.anchor] = funcs[other.func](anchorItem[other.expand],
+            margin);
         item[other.expand] = setExpantionEdge(item, other);
 
         // Assign new outer value if item is larger than others on that plane
