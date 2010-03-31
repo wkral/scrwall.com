@@ -6,32 +6,38 @@
  *
  * Leaves of the tree will be images with left, right, top, bottom edge data
  *
- * Leaves may appear in the tree in multiple places
- *
- * No forced alternation of horizontal and vertical nodes
+ * Nodes will alternate between hoirzontal and vertical vectors
  *
  * The vectors divide an infinite plane and do not detect if they intersect
  * with each other
  *
- * Assumption of no overlapping items
+ * boxes put into the tree will be split each time they encounter a dividing
+ * vector and create more leaves
+ *
+ * this will fail if boxes overlap
  */
 
 function BSPTree() {
 
-    function left_of(a, b) {
-        if(is_box(a, b)) {
-            return a.right < b.left;
-        }
-        return false;
+    function intersect_vertically(b1, b2) {
+        return b1.top < b2.bottom && b2.top < b1.bottom;
     }
-
-    function below(a, b) {
-        if(is_box(a) && is_point(b)) {
-            return a.top <= b.y;
-        }
-        return false;
+    function intersect_horizontally(b1, b2) {
+        return b1.left < b2.right && b2.left < b1.right;
     }
-
+    function left_of(b1, b2) {
+        return b1.right < b2.left;
+    }
+    function above(b1, b2) {
+        return b1.bottom < b2.top;
+    }
+    function less_than(box, vec) {
+        return vec.horizontal ? vec.x < box.top : vec.y < box.left;
+    }
+    function intersects(box, vec) {
+        return vec.horizontal ? vec.x > box.top && vec.x <= box.bottom :
+            vec.y > box.left && vec.y <= box.right;
+    }
     function is_box() {
         for(var i = 0; i < arguments.length; i++) {
             if (!has_properties(arguments[i], 'top', 'bottom', 'left', 'right'))
@@ -40,9 +46,9 @@ function BSPTree() {
         return true;
     }
 
-    function is_point() {
+    function is_vector() {
         for(var i = 0; i < arguments.length; i++) {
-            if (!has_properties(arguments[i], 'x', 'y'))
+            if (!has_properties(arguments[i], 'x', 'y', 'horizontal'))
                 return false;
         }
         return true;
@@ -57,20 +63,29 @@ function BSPTree() {
     }
 
     return {
-        put: function (pt, img) {
+        put: function (b) {
             if(this.head == null) {
-                this.head = {
-                    x: pt.x,
-                    y: pt.y,
-                    horizontal:true 
-                };
-                if(below(img, pt)) {
-                    this.head.left = img;
-                } else {
-                    this.head.right = img;
+                this.head = b;
+            } else if (is_box(this.head)) {
+                var old_head = this.head;
+                if(!intersect_horizontally(old_head, b)) {
+                    if (left_of(old_head, b)) {
+                        this.head = {x: b.left, y: b.top, horizontal: false,
+                            lt: old_head, gt: b};
+                    } else {
+                        this.head = {x: old_head.left, y: old_head.top,
+                            horizontal: false, lt: b, gt: old_head };
+                    }
+                } else if (!intersect_vertically(old_head, b)) {
+                    if(above(old_head, b)) {
+                        this.head = {x: b.left, y: b.top, horizontal: true,
+                            lt: old_head, gt: b};
+                    } else {
+                        this.head = {x: old_head.left, y:old_head.top,
+                            horizontal: true, lt: b, gt: old_head};
+                    }
                 }
             }
         }
     };
 }
-

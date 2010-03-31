@@ -12,21 +12,48 @@ and open the template in the editor.
         <script type="text/javascript" src="http://github.com/jquery/qunit/raw/master/qunit/qunit.js"></script>
         <script type="text/javascript" src="../js/bsp-tree.js"></script>
         <script type="text/javascript">
+var b1 = {left:0, right:9, top:10, bottom: 19};
+var b2 = {left:10, right:19, top:10, bottom: 19};
+var b3 = {left:0, right:9, top:20, bottom: 29};
 
-var img1 = {top: 10, bottom: 0, left: 0, right: 10};
-var img2 = {top: 10, bottom: -10, left: 11, right: 10};
 test('Constructor', function() {
     var tree = BSPTree();
     ok(tree.head == null, 'New tree with no head');
 });
-test('Initial Insert', function() {
+
+test('Insert first box', function() {
     var tree = BSPTree();
-    tree.put({x:0, y:10}, img1);
-    same(tree.head, {x: 0, y: 10, horizontal: true, left: img1},
-        'Top edge is initial vector');
+    tree.put(b1);
+    same(tree.head, b1, 'first box is the head');
 });
-test('Insert special case', function () {
-    has_properties({x:2}, 'x');
+
+test('Insert second box right', function () {
+    var tree = BSPTree();
+    tree.put(b1);
+    tree.put(b2);
+    same(tree.head.lt, b1, 'fisrt box is left of (less than) second');
+    same(tree.head.gt, b2, 'second box is right of (greater than) first');
+});
+test('Insert second box left', function () {
+    var tree = BSPTree();
+    tree.put(b2);
+    tree.put(b1);
+    same(tree.head.lt, b1, 'second box is left of (less than) first');
+    same(tree.head.gt, b2, 'first box is right of (greater than) second');
+});
+test('Insert second box below', function () {
+    var tree = BSPTree();
+    tree.put(b1);
+    tree.put(b3);
+    same(tree.head.lt, b1, 'first box is above (greater thann) second');
+    same(tree.head.gt, b3, 'second box is below (less than) first');
+});
+test('Insert second box above', function () {
+    var tree = BSPTree();
+    tree.put(b3);
+    tree.put(b1);
+    same(tree.head.lt, b1, 'second box is above (greater than) first');
+    same(tree.head.gt, b3, 'first box is below (less than) second');
 });
         </script>
     </head>
