@@ -22,22 +22,86 @@ function BSPTree() {
     function intersect_vertically(b1, b2) {
         return b1.top < b2.bottom && b2.top < b1.bottom;
     }
+
     function intersect_horizontally(b1, b2) {
         return b1.left < b2.right && b2.left < b1.right;
     }
+
     function left_of(b1, b2) {
         return b1.right < b2.left;
     }
+
     function above(b1, b2) {
         return b1.bottom < b2.top;
     }
+
     function less_than(box, vec) {
-        return vec.horizontal ? vec.x < box.top : vec.y < box.left;
+        return vec.horizontal ? vec.x <= box.top : vec.y > box.right;
     }
+
     function intersects(box, vec) {
-        return vec.horizontal ? vec.x > box.top && vec.x <= box.bottom :
-            vec.y > box.left && vec.y <= box.right;
+        return vec.horizontal ? 
+            vec.y > box.top && vec.y <= box.bottom :
+            vec.x > box.left && vec.x <= box.right;
     }
+
+    function split(box, vec) {
+        if(vec.horizontal) {
+            return {
+                gt: {top: box.top, bottom: vec.y -1,
+                    left: box.left, right: box.right},
+                lt: {top: vec.y, bottom: box.bottom,
+                    left: box.left, right: box.right}
+            };
+        } else {
+            return {
+                gt: {left: vec.x, right: box.right,
+                    top: box.top, bottom: box.bottom},
+                lt: {left: box.left, right: vec.x -1,
+                    top: box.top, bottom:box.bottom}
+            };
+        }
+    }
+
+    function insert(box, tree) {
+        if(is_box(tree)) {
+            return add_box(box, tree);
+        } else if(is_vector(tree)) {
+            if(intersects(box, tree)) {
+                var s = split(box, tree);
+                tree.lt = insert(s.lt, tree.lt);
+                tree.gt = insert(s.gt, tree.gt);
+            } else if (less_than(box, tree)) {
+                tree.lt = insert(box, tree.lt);
+            } else {
+                tree.gt = insert(box, tree.gt);
+            }
+            return tree;
+        }
+        throw "tree should only contain vectors or boxes";
+    }
+
+    function add_box(new_box, old_box) {
+        if(!intersect_horizontally(old_box, new_box)) {
+            if (left_of(old_box, new_box)) {
+                return {x: new_box.left, y: new_box.top, 
+                    horizontal: false, lt: old_box, gt: new_box};
+            } else {
+                return {x: old_box.left, y: old_box.top,
+                    horizontal: false, lt: new_box, gt: old_box };
+            }
+        } else if (!intersect_vertically(old_box, new_box)) {
+            if(above(old_box, new_box)) {
+                return {x: new_box.left, y: new_box.top, 
+                    horizontal: true, lt: new_box, gt: old_box};
+            } else {
+                return {x: old_box.left, y:old_box.top,
+                    horizontal: true, lt: new_box, gt: old_box};
+            }
+        }
+        throw "intersecting boxes not supported";
+    }
+
     function is_box() {
         for(var i = 0; i < arguments.length; i++) {
             if (!has_properties(arguments[i], 'top', 'bottom', 'left', 'right'))
@@ -63,28 +127,14 @@ function BSPTree() {
     }
 
     return {
-        put: function (b) {
+        put: function(b) {
             if(this.head == null) {
                 this.head = b;
             } else if (is_box(this.head)) {
-                var old_head = this.head;
-                if(!intersect_horizontally(old_head, b)) {
-                    if (left_of(old_head, b)) {
-                        this.head = {x: b.left, y: b.top, horizontal: false,
-                            lt: old_head, gt: b};
-                    } else {
-                        this.head = {x: old_head.left, y: old_head.top,
-                            horizontal: false, lt: b, gt: old_head };
-                    }
-                } else if (!intersect_vertically(old_head, b)) {
-                    if(above(old_head, b)) {
-                        this.head = {x: b.left, y: b.top, horizontal: true,
-                            lt: old_head, gt: b};
-                    } else {
-                        this.head = {x: old_head.left, y:old_head.top,
-                            horizontal: true, lt: b, gt: old_head};
-                    }
-                }
+                this.head = add_box(b, this.head);
+            } else {
+                //head should be a vector
+                insert(b, this.head);
             }
         }
     };
