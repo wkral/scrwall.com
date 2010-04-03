@@ -36,7 +36,7 @@ function BSPTree() {
     }
 
     function less_than(box, vec) {
-        return vec.horizontal ? vec.x <= box.top : vec.y > box.right;
+        return vec.horizontal ? vec.y <= box.top : vec.x > box.right;
     }
 
     function intersects(box, vec) {
@@ -58,7 +58,7 @@ function BSPTree() {
                 gt: {left: vec.x, right: box.right,
                     top: box.top, bottom: box.bottom},
                 lt: {left: box.left, right: vec.x -1,
-                    top: box.top, bottom:box.bottom}
+                    top: box.top, bottom: box.bottom}
             };
         }
     }
@@ -81,6 +81,21 @@ function BSPTree() {
         throw "tree should only contain vectors or boxes";
     }
 
+    function find_adj(box, tree) {
+        if(is_box(tree)) {
+            return [tree];
+        } else if(is_vector(tree)) {
+            if(intersects(box, tree)) {
+                var s = split(box, tree);
+                return find_adj(s.lt, tree.lt).concat(find_adj(s.gt, tree.gt));
+            } else if (less_than(box, tree)) {
+                return find_adj(box, tree.lt);
+            } else {
+                return find_adj(box, tree.gt);
+            }
+        }
+    }
+
     function add_box(new_box, old_box) {
         if(!intersect_horizontally(old_box, new_box)) {
             if (left_of(old_box, new_box)) {
@@ -95,8 +110,8 @@ function BSPTree() {
                 return {x: new_box.left, y: new_box.top, 
                     horizontal: true, lt: new_box, gt: old_box};
             } else {
-                return {x: old_box.left, y:old_box.top,
-                    horizontal: true, lt: new_box, gt: old_box};
+                return {x: old_box.left, y: old_box.top,
+                    horizontal: true, lt: old_box, gt: new_box};
             }
         }
         throw "intersecting boxes not supported";
@@ -136,6 +151,10 @@ function BSPTree() {
                 //head should be a vector
                 insert(b, this.head);
             }
+        },
+        find_adjacent: function(b) {
+            if(this.head == null) return null;
+            return find_adj(b, this.head);
         }
     };
 }

@@ -55,8 +55,8 @@ test('Insert second box above', function () {
     var tree = BSPTree();
     tree.put(b3);
     tree.put(b1);
-    same(tree.head.lt, b1, 'second box is above (greater than) first');
-    same(tree.head.gt, b3, 'first box is below (less than) second');
+    same(tree.head.gt, b1, 'second box is above (greater than) first');
+    same(tree.head.lt, b3, 'first box is below (less than) second');
 });
 test('Insert three nodes', function() {
     var tree = BSPTree();
@@ -86,10 +86,16 @@ test('Insert a box that gets split horizontally', function() {
     tree.put(sb2);
     same(tree.head.gt.lt, b1, 'first box in correct position');
     same(tree.head.lt.lt, b3, 'second box in correct position');
-    same(tree.head.lt.gt, {left: 10, right:19, top: 20, bottom: 29},
+    same(tree.head.lt.gt, {left: 10, right: 19, top: 20, bottom: 29},
         'bottom half of split box in correct position');
-    same(tree.head.gt.gt, {left: 10, right:19, top: 10, bottom: 19},
+    same(tree.head.gt.gt, {left: 10, right: 19, top: 10, bottom: 19},
         'bottom half of split box in correct position');
+});
+test('Finding adjacent box', function() {
+    var tree = BSPTree();
+    tree.put(b1);
+    same(tree.find_adjacent(b2), [b1], 'Found the correct adjacent box');
+    same(tree.find_adjacent(b3), [b1], 'Found the correct adjacent box');
 });
         </script>
     </head>
