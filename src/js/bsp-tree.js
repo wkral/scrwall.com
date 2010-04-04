@@ -27,6 +27,10 @@ function BSPTree() {
         return b1.left < b2.right && b2.left < b1.right;
     }
 
+    function boxes_intersect(b1, b2) {
+        return intersect_vertically(b1, b2) && intersect_horizontally(b1, b2);
+    }
+
     function left_of(b1, b2) {
         return b1.right < b2.left;
     }
@@ -94,6 +98,7 @@ function BSPTree() {
                 return find_adj(box, tree.gt);
             }
         }
+        throw "tree should only contain vectors or boxes";
     }
 
     function add_box(new_box, old_box) {

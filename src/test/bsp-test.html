@@ -97,6 +97,29 @@ test('Finding adjacent box', function() {
     same(tree.find_adjacent(b2), [b1], 'Found the correct adjacent box');
     same(tree.find_adjacent(b3), [b1], 'Found the correct adjacent box');
 });
+test('Finding adjacent boxes vertical', function() {
+    var tree = BSPTree();
+    tree.put(b1);
+    tree.put(b2);
+    same(tree.find_adjacent(sb1), [b1, b2], 'Found the correct adjacent boxes');
+});
+test('Finding adjacent boxes horizontal', function() {
+    var tree = BSPTree();
+    tree.put(b1);
+    tree.put(b3);
+    same(tree.find_adjacent(sb2), [b3, b1], 'Found the correct adjacent boxes');
+});
+test('Inserting overlapping boxes', function() {
+    var tree = BSPTree();
+    tree.put(b1);
+    try {
+        tree.put({left: 5, right:15, top: 15, bottom: 25});
+        ok(false, 'Failed: expected an exception');
+    } catch (e) {
+        equal(e, 'intersecting boxes not supported',
+            'Caught the exception from overlapping');
+    }
+});
         </script>
     </head>
     <body>
