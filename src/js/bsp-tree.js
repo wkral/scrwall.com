@@ -20,7 +20,7 @@
 function BSPTree() {
 
     function less_than(box, vec) {
-        return vec.horizontal ? vec.y <= box.top : vec.x > box.right;
+        return vec.horizontal ? vec.y > box.bottom : vec.x > box.right;
     }
 
     function intersects(box, vec) {
@@ -32,9 +32,9 @@ function BSPTree() {
     function split(box, vec) {
         if(vec.horizontal) {
             return {
-                gt: {top: box.top, bottom: vec.y -1,
+                lt: {top: box.top, bottom: vec.y -1,
                     left: box.left, right: box.right},
-                lt: {top: vec.y, bottom: box.bottom,
+                gt: {top: vec.y, bottom: box.bottom,
                     left: box.left, right: box.right}
             };
         } else {
@@ -93,10 +93,10 @@ function BSPTree() {
         } else if (!boxes.intersect_vertically(old_box, new_box)) {
             if(boxes.above(old_box, new_box)) {
                 return {x: new_box.left, y: new_box.top, 
-                    horizontal: true, lt: new_box, gt: old_box};
+                    horizontal: true, lt: old_box, gt: new_box};
             } else {
                 return {x: old_box.left, y: old_box.top,
-                    horizontal: true, lt: old_box, gt: new_box};
+                    horizontal: true, lt: new_box, gt: old_box};
             }
         }
         throw "intersecting boxes not supported";

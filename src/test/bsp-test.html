@@ -17,6 +17,7 @@ and open the template in the editor.
 var b1 = {left:0, right:9, top:10, bottom: 19};
 var b2 = {left:10, right:19, top:10, bottom: 19};
 var b3 = {left:0, right:9, top:20, bottom: 29};
+var b4 = {left:10, right:19, top:20, bottom: 29};
 var sb1 = {left:0, right:19, top: 20, bottom: 29};
 var sb2 = {left:10, right:19, top: 10, bottom: 29};
 
@@ -49,48 +50,44 @@ test('Insert second box below', function () {
     var tree = BSPTree();
     tree.put(b1);
     tree.put(b3);
-    same(tree.head.gt, b1, 'first box is above (greater thann) second');
-    same(tree.head.lt, b3, 'second box is below (less than) first');
+    same(tree.head.lt, b1, 'first box is above (less than) second');
+    same(tree.head.gt, b3, 'second box is below (greater than) first');
 });
 test('Insert second box above', function () {
     var tree = BSPTree();
     tree.put(b3);
     tree.put(b1);
-    same(tree.head.gt, b1, 'second box is above (greater than) first');
-    same(tree.head.lt, b3, 'first box is below (less than) second');
+    same(tree.head.lt, b1, 'second box is above (less than) first');
+    same(tree.head.gt, b3, 'first box is below (greater than) second');
 });
 test('Insert three nodes', function() {
     var tree = BSPTree();
     tree.put(b1);
     tree.put(b2);
     tree.put(b3);
-    same(tree.head.lt.gt, b1, 'first box in correct position');
+    same(tree.head.lt.lt, b1, 'first box in correct position');
     same(tree.head.gt, b2, 'second box in correct position');
-    same(tree.head.lt.lt, b3, 'third box in correct position');
+    same(tree.head.lt.gt, b3, 'third box in correct position');
 });
 test('Insert a box that gets split vertically', function() {
     var tree = BSPTree();
     tree.put(b1);
     tree.put(b2);
     tree.put(sb1);
-    same(tree.head.lt.gt, b1, 'first box in correct position');
-    same(tree.head.gt.gt, b2, 'second box in correct position');
-    same(tree.head.lt.lt, {left: 0, right: 9, top: 20, bottom: 29}, 
-        'left half of the split box in correct position');
-    same(tree.head.gt.lt, {left: 10, right: 19, top: 20, bottom: 29},
-        'right half of the split box in correct position');
+    same(tree.head.lt.lt, b1, 'first box in correct position');
+    same(tree.head.gt.lt, b2, 'second box in correct position');
+    same(tree.head.lt.gt, b3, 'left half of split box in correct position');
+    same(tree.head.gt.gt, b4, 'right half of split box in correct position');
 });
 test('Insert a box that gets split horizontally', function() {
     var tree = BSPTree();
     tree.put(b1);
     tree.put(b3);
     tree.put(sb2);
-    same(tree.head.gt.lt, b1, 'first box in correct position');
-    same(tree.head.lt.lt, b3, 'second box in correct position');
-    same(tree.head.lt.gt, {left: 10, right: 19, top: 20, bottom: 29},
-        'bottom half of split box in correct position');
-    same(tree.head.gt.gt, {left: 10, right: 19, top: 10, bottom: 19},
-        'bottom half of split box in correct position');
+    same(tree.head.lt.lt, b1, 'first box in correct position');
+    same(tree.head.gt.lt, b3, 'second box in correct position');
+    same(tree.head.lt.gt, b2, 'top half of split box in correct position');
+    same(tree.head.gt.gt, b4, 'bottom half of split box in correct position');
 });
 test('Finding adjacent box', function() {
     var tree = BSPTree();
@@ -108,7 +105,7 @@ test('Finding adjacent boxes horizontal', function() {
     var tree = BSPTree();
     tree.put(b1);
     tree.put(b3);
-    same(tree.find_adjacent(sb2), [b3, b1], 'Found the correct adjacent boxes');
+    same(tree.find_adjacent(sb2), [b1, b3], 'Found the correct adjacent boxes');
 });
 test('Inserting overlapping boxes', function() {
     var tree = BSPTree();
