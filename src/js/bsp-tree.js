@@ -19,26 +19,6 @@
 
 function BSPTree() {
 
-    function intersect_vertically(b1, b2) {
-        return b1.top < b2.bottom && b2.top < b1.bottom;
-    }
-
-    function intersect_horizontally(b1, b2) {
-        return b1.left < b2.right && b2.left < b1.right;
-    }
-
-    function boxes_intersect(b1, b2) {
-        return intersect_vertically(b1, b2) && intersect_horizontally(b1, b2);
-    }
-
-    function left_of(b1, b2) {
-        return b1.right < b2.left;
-    }
-
-    function above(b1, b2) {
-        return b1.bottom < b2.top;
-    }
-
     function less_than(box, vec) {
         return vec.horizontal ? vec.y <= box.top : vec.x > box.right;
     }
@@ -102,16 +82,16 @@ function BSPTree() {
     }
 
     function add_box(new_box, old_box) {
-        if(!intersect_horizontally(old_box, new_box)) {
-            if (left_of(old_box, new_box)) {
+        if(!boxes.intersect_horizontally(old_box, new_box)) {
+            if (boxes.left_of(old_box, new_box)) {
                 return {x: new_box.left, y: new_box.top, 
                     horizontal: false, lt: old_box, gt: new_box};
             } else {
                 return {x: old_box.left, y: old_box.top,
                     horizontal: false, lt: new_box, gt: old_box };
             }
-        } else if (!intersect_vertically(old_box, new_box)) {
-            if(above(old_box, new_box)) {
+        } else if (!boxes.intersect_vertically(old_box, new_box)) {
+            if(boxes.above(old_box, new_box)) {
                 return {x: new_box.left, y: new_box.top, 
                     horizontal: true, lt: new_box, gt: old_box};
             } else {
