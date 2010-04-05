@@ -1,8 +1,4 @@
-function SpiralLayout(pad, marg) {
-
-    var margin = marg;
-
-    var box_padding = pad + marg;
+function SpiralLayout() {
 
     function add(a, b, positive){
         return positive? a + b : a - b;
@@ -13,10 +9,10 @@ function SpiralLayout(pad, marg) {
     }
 
     var spiral_props = {
-        right: { expanding: 'up', next: 'down'},
-        down: { expanding: 'right', next: 'left'},
-        left: { expanding: 'down', next: 'up'},
-        up: { expanding: 'left', next: 'right'}
+        right: { expand: 'up', next: 'down'},
+        down: { expand: 'right', next: 'left'},
+        left: { expand: 'down', next: 'up'},
+        up: { expand: 'left', next: 'right'}
     };
 
     var direction_props = {
@@ -25,6 +21,13 @@ function SpiralLayout(pad, marg) {
         down: { from: 'top', to: 'bottom', horizontal: false, positive: true},
         up: { from: 'bottom', to: 'top', horizontal: false, positive: false}
     };
+
+    function get_spiral_properties(area) {
+        var props = $.extend({}, spiral_props[area.direction]);
+        props.moving = direction_props[area.direction];
+        props.expanding = direction_props[props.expand];
+        return props;
+    }
 
     function add_center(area, item) {
         var halfHeight = Math.floor(item.height / 2);
@@ -50,53 +53,95 @@ function SpiralLayout(pad, marg) {
     }
 
     function add_normal(area, item) {
-        var props = spiral_props[area.direction];
-        var moving = direction_props[area.direction];
-        var expanding = direction_props[props.expanding];
+        var spiral = get_spiral_properties(area);
 
+        var from = {};
         //assign temp location based on previous expanding and anchor edges
-        var moving_from = add(area.last_moving, 1, moving.positive);
+        from.moving = add(area.last_moving, 1, spiral.moving.positive);
 
         //subtract one to probe inside the border to see if there is space
-        var expanding_from = add(area.last_inner, -1, expanding.positive);
+        from.expanding = add(area.last_inner, -1, spiral.expanding.positive);
 
-        position(item, moving, expanding, moving_from, expanding_from);
+        position(item, spiral, from);
 
         var adjacent = area.space.find_adjacent(item);
 
-        var overlapping = adjacent.filter(function(box) {
-            return boxes.overlap(box, item);
-        });
+        check_overlapping(adjacent, item, spiral, from);
+        
+        position(item, spiral, from);
 
-        var inner = 0;
-        if(overlapping.length > 0) {
-            var pos = expanding.positive;
-            inner = add(max_edge(overlapping, expanding.to, pos), 1, pos);
-        } else {
-            inner = area.last_inner;
-        }
-
-        position(item, moving, expanding, moving_from, inner);
-
-        area.last_moving = item[moving.to];
-        area.last_inner = item[expanding.from];
+        area.last_moving = item[spiral.moving.to];
+        area.last_inner = item[spiral.expanding.from];
 
         // if the border has been crossed do a turn
-        if(less_than(area[moving.to], item[moving.to], moving.positive)) {
-            area.direction = props.next;
+        if(crosses_border(area, item, spiral.moving)) {
+            area.direction = spiral.next;
 
-            area.last_moving = item[expanding.from];
-            area.last_inner = add(area[moving.to], 1, moving.positive);
+            area.last_moving = item[spiral.expanding.from];
+            area.last_inner = add(area[spiral.moving.to], 1,
+                spiral.moving.positive);
 
             //assign new outer value for direction moving in
-            area[moving.to] = item[moving.to];
+            area[spiral.moving.to] = item[spiral.moving.to];
         }
 
         //expand the outer edge if necessary
-        if(less_than(area[expanding.to], item[expanding.to],
-                     expanding.positive)) {
-            area[expanding.to] = item[expanding.to];
+        if(crosses_border(area, item, spiral.expanding)) {
+            area[spiral.expanding.to] = item[spiral.expanding.to];
         }
+    }
+
+    function crosses_border(area, item, dir) {
+        return less_than(area[dir.to], item[dir.to], dir.positive);
+    }
+
+    function check_overlapping(adjacent, item, spiral, from) {
+        var split = divide_list(adjacent, function(box) {
+            return boxes.overlap(box, item);
+        });
+
+        if(split.t.length > 0) {
+            var pos = spiral.expanding.positive;
+            from.expanding =
+                add(max_edge(split.t, spiral.expanding.to, pos), 1, pos);
+        } else {
+            check_intersecting(split.f, item, spiral, from);
+        }
+    }
+
+    function check_intersecting(non_overlapping, item, spiral, from) {
+        var split = divide_list(non_overlapping, function(box) {
+            return boxes.intersect(box, item, spiral.expanding.horizontal);
+        });
+        if(split.t.length > 0) {
+            var pos = spiral.expanding.positive;
+            from.expanding = 
+                add(max_edge(split.t, spiral.expanding.to, pos), 1, pos);
+        } else {
+            check_direct_adjacent(split.f, item, spiral, from);
+        }
+    }
+
+    function check_direct_adjacent(non_intersecting, item, spiral, from) {
+        from.expanding = max_edge(non_intersecting, spiral.expanding.from,
+            !spiral.expanding.positive);
+        var split = divide_list(non_intersecting, function(box) {
+            return add(box[spiral.moving.to], 1, spiral.moving.positive) ==
+                item[spiral.moving.from];
+        });
+        if(split.f.length > 0) {
+            var pos = spiral.moving.positive;
+            from.moving = add(max_edge(split.f, spiral.moving.to, pos), 1, pos);
+        }
+
+    }
+
+    function divide_list(list, callback) {
+        var lists = {t: [], f: []};
+        for(var i = 0; i < list.length; i++) {
+            (callback(list[i]) ? lists.t : lists.f).push(list[i]);
+        }
+        return lists;
     }
 
     function max_edge(bs, edge, positive) {
@@ -105,15 +150,15 @@ function SpiralLayout(pad, marg) {
         }, bs[0][edge]);
     }
 
-    function position(item, moving, expanding, moving_from, expanding_from) {
-        item[moving.from] = moving_from;
-        item[expanding.from] = expanding_from;
+    function position(item, spiral, from) {
+        item[spiral.moving.from] = from.moving;
+        item[spiral.expanding.from] = from.expanding;
 
-        item[moving.to] = get_to_edge(item, moving);
-        item[expanding.to] = get_to_edge(item, expanding);
+        item[spiral.moving.to] = get_to_edge(item, spiral.moving);
+        item[spiral.expanding.to] = get_to_edge(item, spiral.expanding);
     }
 
-function get_to_edge(item, dir) {
+    function get_to_edge(item, dir) {
         var dim = (dir.horizontal ? item.width : item.height);
         return add(item[dir.from], dim, dir.positive);
     }
@@ -136,10 +181,8 @@ function get_to_edge(item, dir) {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                dom_width: w,
-                dom_height: h,
-                width: w + 2 * box_padding,
-                height: h + 2 * box_padding
+                width: w,
+                height: h
             }
 
             if(this.direction == '') {
@@ -149,9 +192,6 @@ function get_to_edge(item, dir) {
             }
 
             this.space.put(item);
-
-            item.dom_top = item.top + margin;
-            item.dom_left = item.left + margin;
             
             return item;
         }

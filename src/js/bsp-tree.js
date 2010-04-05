@@ -44,8 +44,8 @@ function BSPTree() {
     }
 
     function set_dimentions(box) {
-        box.width = box.right - box.left;
-        box.height = box.bottom - box.top;
+        box.width = box.right - box.left + 1;
+        box.height = box.bottom - box.top + 1;
     }
 
     function insert(box, tree) {

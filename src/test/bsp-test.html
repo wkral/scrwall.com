@@ -14,12 +14,12 @@ and open the template in the editor.
         <script type="text/javascript" src="../js/bsp-tree.js"></script>
         <script type="text/javascript">
 
-var b1 = {left:0, right:9, top:10, bottom: 19, data: 'extra property'};
-var b2 = {left:10, right:19, top:10, bottom: 19, data: 'extra property'};
-var b3 = {left:0, right:9, top:20, bottom: 29, data: 'extra property'};
-var b4 = {left:10, right:19, top:20, bottom: 29, data: 'extra property'};
-var sb1 = {left:0, right:19, top: 20, bottom: 29, data: 'extra property'};
-var sb2 = {left:10, right:19, top: 10, bottom: 29, data: 'extra property'};
+var b1 = {left:0, right:9, top:10, bottom: 19, width: 10, height: 10, data: 'extra property'};
+var b2 = {left:10, right:19, top:10, bottom: 19, width: 10, height: 10, data: 'extra property'};
+var b3 = {left:0, right:9, top:20, bottom: 29, width: 10, height: 10, data: 'extra property'};
+var b4 = {left:10, right:19, top:20, bottom: 29, width: 10, height: 10, data: 'extra property'};
+var sb1 = {left:0, right:19, top: 20, bottom: 29, width: 20, height: 10, data: 'extra property'};
+var sb2 = {left:10, right:19, top: 10, bottom: 29, width: 10, height: 20,  data: 'extra property'};
 
 test('Constructor', function() {
     var tree = BSPTree();

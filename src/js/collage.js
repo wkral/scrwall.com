@@ -140,12 +140,16 @@ function loadImage() {
 
     var position = body.data('position');
 
-    var item = layout.add(this.width, this.height);
+    var box_padding = (MARGIN + PADDING) * 2;
 
-    domItem.css('top', item.dom_top + position.offsetY + 'px');
-    domItem.css('left', item.dom_left + position.offsetX +'px');
-    domItem.data('top', item.dom_top);
-    domItem.data('left', item.dom_left);
+    var item = layout.add(this.width + box_padding, this.height + box_padding);
+
+    var top = item.top + MARGIN;
+    var left = item.left + MARGIN;
+    domItem.css('top', top + position.offsetY + 'px');
+    domItem.css('left', left + position.offsetX +'px');
+    domItem.data('top', top);
+    domItem.data('left', left);
 
     body.append(domItem);
 }
