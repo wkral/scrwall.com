@@ -30,21 +30,15 @@ function BSPTree() {
     }
 
     function split(box, vec) {
+        var s = {lt: $.extend({}, box), gt: $.extend({}, box)};
         if(vec.horizontal) {
-            return {
-                lt: {top: box.top, bottom: vec.y -1,
-                    left: box.left, right: box.right},
-                gt: {top: vec.y, bottom: box.bottom,
-                    left: box.left, right: box.right}
-            };
+            s.lt.bottom = vec.y -1;
+            s.gt.top = vec.y;
         } else {
-            return {
-                gt: {left: vec.x, right: box.right,
-                    top: box.top, bottom: box.bottom},
-                lt: {left: box.left, right: vec.x -1,
-                    top: box.top, bottom: box.bottom}
-            };
+            s.gt.left = vec.x;
+            s.lt.right = vec.x -1;
         }
+        return s;
     }
 
     function insert(box, tree) {
