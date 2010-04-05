@@ -98,21 +98,21 @@ $(function() {
     body.data('layout', SpiralLayout(PADDING, MARGIN));
     
     $.each(['http://static.jquery.com/files/rocker/images/logo_jquery_215x53.gif',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kx1o246h871qza6kro1_500_large.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/killer_ring.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/enhanced_penulum_channel.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/1238997252979083.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/1254078432801366.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/27605bbce5a1c3f75c383967c48d1b62_l.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/paradise_now-2.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/a342f0c470b7535ee05ead326c1e2c3d_l.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kwuahsjxnv1qzs56do1_500.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/fb66aed811d982341fcb4c3621c97090_l.png',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/xfvl90.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/3140453fce7b7a8b5719c3ed49a3b53e_l.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/9eb0a9b8728ced5ce590c41b7a69f16d_l.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/1244249870410811.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/0e210818795129a0fce6edc182684600_l.png'
+            'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kx1o246h871qza6kro1_500_large.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/killer_ring.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/enhanced_penulum_channel.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/1238997252979083.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/1254078432801366.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/27605bbce5a1c3f75c383967c48d1b62_l.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/paradise_now-2.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/a342f0c470b7535ee05ead326c1e2c3d_l.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kwuahsjxnv1qzs56do1_500.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/fb66aed811d982341fcb4c3621c97090_l.png',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/xfvl90.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/3140453fce7b7a8b5719c3ed49a3b53e_l.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/9eb0a9b8728ced5ce590c41b7a69f16d_l.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/1244249870410811.jpg',
+            'http://waytoogood.ca/wp-content/gallery/inspiration/0e210818795129a0fce6edc182684600_l.png'
     ],
         function () {
             addItem(this);
@@ -142,10 +142,10 @@ function loadImage() {
 
     var item = layout.add(this.width, this.height);
 
-    domItem.css('top', item.top + position.offsetY + 'px');
-    domItem.css('left', item.left + position.offsetX +'px');
-    domItem.data('top', item.top);
-    domItem.data('left', item.left);
+    domItem.css('top', item.dom_top + position.offsetY + 'px');
+    domItem.css('left', item.dom_left + position.offsetX +'px');
+    domItem.data('top', item.dom_top);
+    domItem.data('left', item.dom_left);
 
     body.append(domItem);
 }

@@ -1,152 +1,103 @@
 function SpiralLayout(pad, marg) {
 
-    var padding = pad;
     var margin = marg;
 
-    var directionProps = {
-        right: { anchor: 'left', expand: 'right', dim: 'width', func: 'add'},
-        left: { anchor: 'right', expand: 'left', dim: 'width', func: 'sub'},
-        down: { anchor: 'top', expand: 'bottom', dim: 'height', func: 'add'},
-        up: { anchor: 'bottom', expand: 'top', dim: 'height', func: 'sub'}
+    var box_padding = pad + marg;
+
+    function add(a, b, positive){
+        return positive? a + b : a - b;
+    }
+
+    function less_than(a, b, positive) {
+        return positive ? a < b : a > b;
+    }
+
+    var spiral_props = {
+        right: { expanding: 'up', next: 'down'},
+        down: { expanding: 'right', next: 'left'},
+        left: { expanding: 'down', next: 'up'},
+        up: { expanding: 'left', next: 'right'}
     };
 
-    var funcs = {
-        add: function(a, b) {
-            return a + b;
-        },
-        sub: function(a, b) {
-            return a - b;
-        }
+    var direction_props = {
+        right: { from: 'left', to: 'right', horizontal: true, positive: true},
+        left: { from: 'right', to: 'left', horizontal: true, positive: false},
+        down: { from: 'top', to: 'bottom', horizontal: false, positive: true},
+        up: { from: 'bottom', to: 'top', horizontal: false, positive: false}
     };
 
-    var cmp = {
-        add: function (a, b) {
-            return a > b;
-        },
-        sub: function(a, b) {
-            return a < b;
-        }
-    };
-
-    var layoutProps = {
-        right: { other: 'up', next: 'down'},
-        down: { other: 'right', next: 'left'},
-        left: { other: 'down', next: 'up'},
-        up: {other: 'left', next: 'right'}
-    };
-
-    function addCenter(area, item) {
+    function add_center(area, item) {
         var halfHeight = Math.floor(item.height / 2);
         var halfWidth = Math.floor(item.width / 2);
 
-        item.top = -halfHeight - padding;
-        item.left = -halfWidth - padding;
-        item.right = setExpantionEdge(item, directionProps['right']);
-        item.bottom = setExpantionEdge(item, directionProps['down']);
-        area.top.inner = item.top;
-        area.left.inner = item.left;
+        item.top = -halfHeight;
+        item.left = -halfWidth;
+
         //subtract to account for a potentially lost pixel in int division
-        area.bottom.inner = item.height - halfHeight + padding;
-        area.right.inner = item.width - halfWidth + padding;
+        item.right = item.width - halfWidth;
+        item.bottom = item.height - halfHeight;
 
-        area.top.outer = area.top.inner;
-        area.bottom.outer = area.bottom.inner;
-        area.left.outer = area.left.inner;
-        area.right.outer = area.right.inner;
+        area.top = item.top;
+        area.left = item.left;
+        area.bottom = item.bottom;
+        area.right = item.right;
 
-        //special case
-        area.lastEdge = area.right.outer;
-        area.direction = 'special';
+        // special case: next box diectly to the right moving down
+        // adding in down direction will add 1 to box expanding edge
+        area.last_moving = item.top;
+        area.last_inner = item.right;
+        area.direction = 'down';
     }
 
-    function addSpecial(area, item) {
-        item.top = area.top.outer;
-        item.left = area.lastEdge + margin;
-        item.right = setExpantionEdge(item, directionProps['right']);
-        item.bottom = setExpantionEdge(item, directionProps['down']);
-        area.right.outer = item.left + item.width + padding * 2;
-        if(item.top + item.height + padding * 2 > area.bottom.outer) {
-            area.lastEdge = item.left;
-            area.direction = 'left';
-            area.right.inner = area.right.outer;
-            area.bottom.outer = item.top + item.height + padding * 2;
-        } else {
-            area.lastEdge = item.top + item.height + padding * 2;
-            area.direction = 'down';
-        }
-    }
+    function add_normal(area, item) {
+        var props = spiral_props[area.direction];
+        var moving = direction_props[area.direction];
+        var expanding = direction_props[props.expanding];
 
-    function addNormal(area, item) {
-        var props = layoutProps[area.direction];
-        var moving = directionProps[area.direction];
-        var other = directionProps[props.other];
+        //assign temp location based on previous expanding and anchor edges
+        item[moving.from] = area.last_moving;
+        item[expanding.from] = area.last_inner;
+        
+        item[moving.to] = get_to_edge(item, moving);
+        item[expanding.to] = get_to_edge(item, expanding);
 
-        //Assign new top and left based on previous state
-        /* moving right -> inner top = bottom edge
-           moving down  -> inner right = left edge
-           moving left  -> inner bottom = top edge
-           moving up    -> inner left = right edge */
-        item[moving.anchor] = funcs[moving.func](area.lastEdge, margin);
-        item[moving.expand] = setExpantionEdge(item, moving);
+        area.last_moving = item[moving.to];
+        area.last_inner = item[expanding.from];
 
-        var anchorItem = findAnchorEdge(area, moving, other, 
-            item[moving.anchor], item[moving.expand]);
-
-        item[other.anchor] = funcs[other.func](anchorItem[other.expand],
-            margin);
-        item[other.expand] = setExpantionEdge(item, other);
-
-        // Assign new outer value if item is larger than others on that plane
-        /* follow same mapping based on direction moving */
-        if(cmp[other.func](item[other.expand], area[other.expand].outer)) {
-            area[other.expand].outer = item[other.expand];
-        }
-        //Check if the border has been crossed
-        /* check the outer value of the direction its moving in */
-        if(cmp[moving.func](item[moving.expand], area[moving.expand].outer)) {
+        //Check if the border has been crossed and turn
+        if(less_than(area[moving.to], item[moving.to], moving.positive)) {
             area.direction = props.next;
+
+            area.last_moving = item[expanding.from];
+            area.last_inner = area[moving.to];
+
             //assign new outer value for direction moving in
-            area[moving.expand].outer = item[moving.expand];
-            //the outer becomes the inner now that we're not working on it
-            area[other.expand].inner = area[other.expand].outer;
+            area[moving.to] = item[moving.to];
         }
-        //assign last edge values in the direction moving in
-        area.lastEdge = item[directionProps[area.direction].expand];
+
+        //expand the outer edge if necessary
+        if(less_than(area[expanding.to], item[expanding.to],
+                     expanding.positive)) {
+            area[expanding.to] = item[expanding.to];
+        }
     }
 
-    function findAnchorEdge(area, moving, other, edge1, edge2) {
-        var start = edge1 < edge2 ? edge1 : edge2 - margin;
-        var end = edge1 > edge2 ? edge1 : edge2 + margin;
-
-        var items = area[moving.anchor + 'Edges'].range(start, end);
-        items = items.concat(area[moving.expand + 'Edges'].range(start, end));
-
-        var item = items.reduce(function (prev, curr) {
-            return cmp[other.func](prev[other.expand], curr[other.expand]) ?
-                prev : curr;
-        });
-        return item;
-    }
-
-    function setExpantionEdge(item, dir) {
-        var func = funcs[dir.func];
-        var dim = item[dir.dim] + padding *2;
-        return func(item[dir.anchor], dim);
+    function get_to_edge(item, dir) {
+        var dim = (dir.horizontal ? item.width : item.height);
+        return add(item[dir.from], dim, dir.positive);
     }
 
     return {
-        top: { inner: 0, outer: 0},
-        bottom: { inner: 0, outer: 0},
-        left: { inner: 0, outer: 0},
-        right: { inner: 0, outer: 0},
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
 
         direction: '',
-        lastEdge: 0,
+        last_inner: 0,
+        last_moving: 0,
 
-        topEdges: SortedTree(),
-        rightEdges: SortedTree(),
-        bottomEdges: SortedTree(),
-        leftEdges: SortedTree(),
+        space: BSPTree(),
 
         add: function(w, h) {
             var item = {
@@ -154,23 +105,23 @@ function SpiralLayout(pad, marg) {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                width: w,
-                height: h
+                dom_width: w,
+                dom_height: h,
+                width: w + 2 * box_padding,
+                height: h + 2 * box_padding
             }
 
             if(this.direction == '') {
-                addCenter(this, item);
-            } else if (this.direction == 'special') {
-                addSpecial(this, item);
+                add_center(this, item);
             } else {
-                addNormal(this, item);
+                add_normal(this, item);
             }
 
-            this.leftEdges.put(item.left, item);
-            this.topEdges.put(item.top, item);
-            this.rightEdges.put(item.right, item);
-            this.bottomEdges.put(item.bottom, item);
+            this.space.put(item);
 
+            item.dom_top = item.top + margin;
+            item.dom_left = item.left + margin;
+            
             return item;
         }
 
