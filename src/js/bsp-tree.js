@@ -76,7 +76,7 @@ function BSPTree() {
     }
 
     function add_box(new_box, old_box) {
-        if(!boxes.intersect_horizontally(old_box, new_box)) {
+        if(!boxes.intersect(old_box, new_box, false)) {
             if (boxes.left_of(old_box, new_box)) {
                 return {x: new_box.left, y: new_box.top, 
                     horizontal: false, lt: old_box, gt: new_box};
@@ -84,7 +84,7 @@ function BSPTree() {
                 return {x: old_box.left, y: old_box.top,
                     horizontal: false, lt: new_box, gt: old_box };
             }
-        } else if (!boxes.intersect_vertically(old_box, new_box)) {
+        } else if (!boxes.intersect(old_box, new_box, true)) {
             if(boxes.above(old_box, new_box)) {
                 return {x: new_box.left, y: new_box.top, 
                     horizontal: true, lt: old_box, gt: new_box};

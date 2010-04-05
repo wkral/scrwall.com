@@ -44,8 +44,8 @@ function SpiralLayout(pad, marg) {
 
         // special case: next box diectly to the right moving down
         // adding in down direction will add 1 to box expanding edge
-        area.last_moving = item.top;
-        area.last_inner = item.right;
+        area.last_moving = item.top - 1;
+        area.last_inner = item.right + 1;
         area.direction = 'down';
     }
 
@@ -55,21 +55,20 @@ function SpiralLayout(pad, marg) {
         var expanding = direction_props[props.expanding];
 
         //assign temp location based on previous expanding and anchor edges
-        item[moving.from] = area.last_moving;
-        item[expanding.from] = area.last_inner;
-        
-        item[moving.to] = get_to_edge(item, moving);
-        item[expanding.to] = get_to_edge(item, expanding);
+        var moving_from = add(area.last_moving, 1, moving.positive);
+        var expanding_from = area.last_inner;
+
+        position(item, moving, expanding, moving_from, expanding_from);
 
         area.last_moving = item[moving.to];
         area.last_inner = item[expanding.from];
 
-        //Check if the border has been crossed and turn
+        // if the border has been crossed do a turn
         if(less_than(area[moving.to], item[moving.to], moving.positive)) {
             area.direction = props.next;
 
             area.last_moving = item[expanding.from];
-            area.last_inner = area[moving.to];
+            area.last_inner = add(area[moving.to], 1, moving.positive);
 
             //assign new outer value for direction moving in
             area[moving.to] = item[moving.to];
@@ -82,7 +81,15 @@ function SpiralLayout(pad, marg) {
         }
     }
 
-    function get_to_edge(item, dir) {
+    function position(item, moving, expanding, moving_from, expanding_from) {
+        item[moving.from] = moving_from;
+        item[expanding.from] = expanding_from;
+
+        item[moving.to] = get_to_edge(item, moving);
+        item[expanding.to] = get_to_edge(item, expanding);
+    }
+
+function get_to_edge(item, dir) {
         var dim = (dir.horizontal ? item.width : item.height);
         return add(item[dir.from], dim, dir.positive);
     }
