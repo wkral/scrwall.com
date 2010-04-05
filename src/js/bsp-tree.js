@@ -38,7 +38,14 @@ function BSPTree() {
             s.gt.left = vec.x;
             s.lt.right = vec.x -1;
         }
+        set_dimentions(s.lt);
+        set_dimentions(s.gt);
         return s;
+    }
+
+    function set_dimentions(box) {
+        box.width = box.right - box.left;
+        box.height = box.bottom - box.top;
     }
 
     function insert(box, tree) {

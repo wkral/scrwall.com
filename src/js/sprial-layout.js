@@ -56,9 +56,27 @@ function SpiralLayout(pad, marg) {
 
         //assign temp location based on previous expanding and anchor edges
         var moving_from = add(area.last_moving, 1, moving.positive);
-        var expanding_from = area.last_inner;
+
+        //subtract one to probe inside the border to see if there is space
+        var expanding_from = add(area.last_inner, -1, expanding.positive);
 
         position(item, moving, expanding, moving_from, expanding_from);
+
+        var adjacent = area.space.find_adjacent(item);
+
+        var overlapping = adjacent.filter(function(box) {
+            return boxes.overlap(box, item);
+        });
+
+        var inner = 0;
+        if(overlapping.length > 0) {
+            var pos = expanding.positive;
+            inner = add(max_edge(overlapping, expanding.to, pos), 1, pos);
+        } else {
+            inner = area.last_inner;
+        }
+
+        position(item, moving, expanding, moving_from, inner);
 
         area.last_moving = item[moving.to];
         area.last_inner = item[expanding.from];
@@ -79,6 +97,12 @@ function SpiralLayout(pad, marg) {
                      expanding.positive)) {
             area[expanding.to] = item[expanding.to];
         }
+    }
+
+    function max_edge(bs, edge, positive) {
+        return bs.reduce(function(max, box) {
+            return less_than(max, box[edge], positive) ? box[edge]: max;
+        }, bs[0][edge]);
     }
 
     function position(item, moving, expanding, moving_from, expanding_from) {

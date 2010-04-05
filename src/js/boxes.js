@@ -6,7 +6,7 @@ var boxes = {
     },
 
     overlap: function(b1, b2) {
-        return intersect(b1, b2, true) && intersect(b1, b2, false);
+        return this.intersect(b1, b2, true) && this.intersect(b1, b2, false);
     },
 
     left_of: function(b1, b2) {
