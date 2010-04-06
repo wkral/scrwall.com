@@ -100,7 +100,8 @@ function BSPTree() {
                     horizontal: true, lt: new_box, gt: old_box};
             }
         }
-        throw "intersecting boxes not supported";
+        throw "intersecting boxes not supported current: " 
+            + boxes.to_string(old_box) + "  new: " + boxes.to_string(new_box);
     }
 
     function is_box() {

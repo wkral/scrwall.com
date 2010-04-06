@@ -118,20 +118,20 @@ function SpiralLayout() {
             from.expanding = 
                 add(max_edge(split.t, spiral.expanding.to, pos), 1, pos);
         } else {
-            check_direct_adjacent(split.f, item, spiral, from);
+            check_non_intersecting(split.f, item, spiral, from);
         }
     }
 
-    function check_direct_adjacent(non_intersecting, item, spiral, from) {
+    function check_non_intersecting(non_intersecting, item, spiral, from) {
         from.expanding = max_edge(non_intersecting, spiral.expanding.from,
             !spiral.expanding.positive);
+        position(item, spiral, from);
         var split = divide_list(non_intersecting, function(box) {
-            return add(box[spiral.moving.to], 1, spiral.moving.positive) ==
-                item[spiral.moving.from];
+            return boxes.intersect(box, item, spiral.moving.horizontal);
         });
-        if(split.f.length > 0) {
+        if(split.t.length > 0) {
             var pos = spiral.moving.positive;
-            from.moving = add(max_edge(split.f, spiral.moving.to, pos), 1, pos);
+            from.moving = add(max_edge(split.t, spiral.moving.to, pos), 1, pos);
         }
 
     }

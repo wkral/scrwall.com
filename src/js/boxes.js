@@ -15,5 +15,10 @@ var boxes = {
 
     above: function(b1, b2) {
         return b1.bottom < b2.top;
+    },
+
+    to_string: function(box) {
+        return '{ left: ' + box.left + ' right: ' + box.right +
+            ' top: ' + box.top + ' bottom:' + box.bottom + '}';
     }
 }
