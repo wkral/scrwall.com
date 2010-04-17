@@ -1,0 +1,17 @@
+application: scrwall
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /.*
+  script: helloworld.py
+
+- url: /js
+  static_dir: js
+
+- url: /static
+  static_dir: static
+
+- url: /test
+  static_dir: static

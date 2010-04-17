@@ -1,2 +1,5 @@
 nbproject
+data
+unittests.sh
+*.pyc
 
