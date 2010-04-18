@@ -9,8 +9,20 @@ def create(name):
     w.put()
     return w
 
-def add_url(wall, url):
-    wall.urls.append(url)
+def add_url(id, url):
+    if(url.startswith('http://')):
+        wall = find(id)
+        if wall:
+            wall.urls.append(url)
+            wall.put()
+    else:
+        raise ValueError('Must be a well formatted URL')
+
+def rename(id, name):
+    wall = find(id)
+    if wall:
+        wall.name = name
+        wall.put()
 
 def find(unique_id):
     return Wall.gql('WHERE unique_id = :1', unique_id).get()
