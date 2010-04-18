@@ -27,16 +27,16 @@ class TestWalls():
     def test_add_url(self):
         walls.add_url(self.wall.unique_id, URL1)
         w = walls.find(self.wall.unique_id)
-        eq_(len(w.urls), 1)
-        eq_(w.urls[0], URL1)
+        eq_(w.items.count(), 1)
+        eq_(w.items[0].url, URL1)
 
     def test_add_two_urls(self):
         walls.add_url(self.wall.unique_id, URL1)
         walls.add_url(self.wall.unique_id, URL2)
         w = walls.find(self.wall.unique_id)
-        eq_(len(w.urls), 2)
-        eq_(w.urls[0], URL1)
-        eq_(w.urls[1], URL2)
+        eq_(w.items.count(), 2)
+        eq_(w.items[0].url, URL1)
+        eq_(w.items[1].url, URL2)
 
     @raises(ValueError)
     def test_bad_url(self):

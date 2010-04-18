@@ -13,8 +13,7 @@ def add_url(id, url):
     if(url.startswith('http://')):
         wall = find(id)
         if wall:
-            wall.urls.append(url)
-            wall.put()
+            WallItem(wall=wall, url=url).put()
     else:
         raise ValueError('Must be a well formatted URL')
 
