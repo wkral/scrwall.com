@@ -4,17 +4,20 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /.*
-  script: helloworld.py
-
 - url: /js
   static_dir: js
 
 - url: /static
   static_dir: static
 
+- url: /images
+  static_dir: images
+
+- url: /font-face
+  static_dir: font-face
+
 - url: /test
-  static_dir: static
+  static_dir: test
 
 - url: /.*
   script: view.py

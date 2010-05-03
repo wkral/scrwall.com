@@ -5,5 +5,5 @@ app = TestApp(application())
 
 def test_index():
     response = app.get('/')
-    assert 'Home Page' in str(response)
+    assert 'collect &amp; share' in str(response)
 

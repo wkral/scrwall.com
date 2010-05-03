@@ -1,10 +1,18 @@
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
 
-class HomePage(webapp.RequestHandler):
+
+# add convienience method to save some code
+class Handler(webapp.RequestHandler):
+    def respond(self, file, values):
+        self.response.headers['Content-Type'] = 'text/html'
+        self.response.out.write(template.render('templates/%s' % file, values))
+
+
+class HomePage(Handler):
     def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write('Home Page')
+        self.respond('index.html', {})
 
 urls = [('/', HomePage)]
 
