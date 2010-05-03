@@ -33,6 +33,10 @@ a {
     text-decoration:none;
 }
 
+img {
+    border: 0;
+}
+
 a:hover {
     color:#0b7fb1;
 }

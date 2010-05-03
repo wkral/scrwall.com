@@ -1,4 +1,6 @@
 import walls
+import helper
+from model import *
 from nose.tools import *
 
 WALL_NAME = 'New Collection'
@@ -11,8 +13,8 @@ class TestWalls():
     def setup(self):
         self.wall = walls.create(WALL_NAME)
 
-    def teardown_func(self):
-        self.wall.delete()
+    def teardown(self):
+        helper.clean_db()
 
     def test_create_wall(self):
         assert self.wall.name == WALL_NAME
@@ -20,7 +22,7 @@ class TestWalls():
         for c in self.wall.unique_id:
             assert c in walls.ALPHABET
 
-    def test_fetch_wall(self):
+    def test_find_wall(self):
         w = walls.find(self.wall.unique_id)
         assert self.wall.name == w.name
 
@@ -42,3 +44,18 @@ class TestWalls():
     def test_bad_url(self):
         walls.add_url(self.wall, BAD_URL)
 
+class TestMultipleWalls():
+    def setup(self):
+        helper.clean_db()
+        for i in range(10):
+            walls.create(str(i))
+        eq_(len(Wall.all().fetch(100)), 10)
+    def teardown(self):
+        helper.clean_db()
+        assert len(walls.get_latest(10)) == 0
+    def test_get_latest(self):
+        eq_(len(walls.get_latest(3)), 3)
+        latest = walls.get_latest(12)
+        eq_(len(latest), 10)
+        latest = walls.get_latest(2)
+        assert latest[0].created > latest[1].created, 'first item should be newest'

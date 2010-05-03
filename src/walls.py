@@ -26,6 +26,9 @@ def rename(id, name):
 def find(unique_id):
     return Wall.gql('WHERE unique_id = :1', unique_id).get()
 
+def get_latest(n):
+    return Wall.all().order('-created').fetch(n)
+
 def get_string_id(n, alphabet):
     if (n == 0):
         return alphabet[0]

@@ -13,16 +13,16 @@
         <div class="container">
             <div id="header_nav" class="navlinks">
                 <a class="navlinks" href="http://www.twitter.com/scrwall">
-                    <img src="images/twitter_icon.png" border="0" alt="Follow Us on Twitter" /> FOLLOW US
+                    <img src="images/twitter_icon.png" alt="Follow Us on Twitter" /> FOLLOW US
                 </a> &nbsp;&nbsp;
                 <a class="navlinks" href="http://www.facebook.com/scrwall">
-                    <img src="images/fbook_icon.png" border="0" alt="Find Us on Facebook" /> FIND US
+                    <img src="images/fbook_icon.png" alt="Find Us on Facebook" /> FIND US
                 </a>
             </div>
             <div id="logo">
                 <p>
                     <a href="http://www.scrwall.com">
-                        <img class="middle" src="images/logo_big.png" border="0" alt="Scrwall" />
+                        <img class="middle" src="images/logo_big.png" alt="Scrwall" />
                     </a> &nbsp;
                     <span class="tagline"><em>everytime you share, share more</em></span>
                 </p>
@@ -31,7 +31,7 @@
     </div>
     <div id="main" class="container">
     	<div id="screenshot">
-            <img src="images/scrwall_screen.jpg" border="0" alt="Scrwall Collection" />
+            <img src="images/scrwall_screen.jpg" alt="Scrwall Collection" />
         </div>
         <div id="content">
             <h1 class="title1">An easy way to</h1>
@@ -51,7 +51,11 @@
             <h2>Recent Scrwall Collections</h2>
         </div>
         <div id="collections">
-            Some text here that runs longer so I can see what's going onee and on and on and on
+            <ol>
+                {% for wall in latest %}
+                <li>{{wall.name}}</li>
+                {% endfor %}
+            </ol>
         </div>
     </div>
     <div id="footer">
@@ -63,7 +67,7 @@
             </div>
             <div id="footer_logo">
                 <a href="http://www.scrwall.com">
-                    <img src="images/logo_footer.png" border="0" alt="Scrwall" />
+                    <img src="images/logo_footer.png" alt="Scrwall" />
                 </a>
             </div>
             <div id="footer_left" class="footlinks">
