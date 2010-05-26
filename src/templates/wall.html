@@ -1,8 +1,78 @@
-<html>
-    <head>
-        <title>{{wall.name}} - Scrwall</title>
-    </head>
-    <body>
-        <h1>{{wall.name}}</h1>
-    </body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+    <title>Scrwall - Everytime you share, share more</title> 
+    <link href="/static/style2.css" rel="stylesheet" type="text/css" /> 
+    <link rel="shortcut icon" href="images/favicon.ico" /> 
+    <script src="/js/jquery-1.4.js" type="text/javascript" charset="utf-8"></script> 
+    <script src="/js/jquery.defaultvalue.js" type="text/javascript" charset="utf-8"></script> 
+    <script type="text/javascript"> 
+        /* <![CDATA[ */
+        jQuery(function() {
+            $("#coll-name").defaultvalue("{{wall.name}}");
+            $("#img-url").defaultvalue("Drop your image URLs here");
+            
+            $('#collname form').submit(function (e) {
+                var form = $(this)
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#coll-name').defaultvalue(data.name);
+                    }
+                });
+                e.preventDefault();
+                return false;
+            }); 
+        });
+        /* ]]> */
+    </script>  
+</head> 
+<body> 
+    <div id="header"> 
+        <div class="container"> 
+            <div id="header_nav" class="navlinks">
+                <a class="navlinks" href="http://www.twitter.com/scrwall">Feedback</a>
+                <a class="navlinks" href="http://www.facebook.com/scrwall">Twitter</a>
+                <a class="navlinks" href="http://www.facebook.com/scrwall">Facebook</a>
+                <a class="navlinks" href="http://www.facebook.com/scrwall">Legal</a>
+            </div>
+            <div id="logo">
+                <p>
+                    <a href="http://www.scrwall.com">
+                        <img src="/images/logo_big.png" id="logo-img" alt="Scrwall" class="middle" />
+                    </a>
+                    <span class="tagline"><em>everytime you share, share more</em></span>
+                </p> 
+            </div> 
+            <a id="startbtn" href="#"></a>
+        </div> 
+    </div>
+    <div class="container">
+        <div id="main">
+            <div id="message" class="message">
+                Oops, we don't currently allow that, but we're aware of it now and will try to make it happen.
+                <a class="message" href="#">Let us know exactly how you wanted to use it</a>
+            </div> 
+            <div id="collname">
+                <form method="POST" action="/c/{{wall.unique_id}}">
+                    <input type="text" name="name" id="coll-name" value="" size="25" maxlength="100" /> 
+                    <input type="submit" value="SAVE" /> 
+                </form> 
+            </div> 
+            <div id="imgurl"> 
+                <form method="POST" action="/c/{{wall.unique_id}}/item"> 
+                    <input type="text" name="item" id="img-url" value="" size="25" maxlength="255" /> 
+                    <input type="button" value="ADD" />
+                </form> 
+            </div> 
+            <div id="collurl" class="message"> 
+                http://scrwall.com/c/{{wall.unique_id}} <input type="button" value="COPY" /> 
+            </div>
+        </div>
+    </div>
+</body> 
 </html>

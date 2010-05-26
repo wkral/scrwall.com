@@ -22,6 +22,7 @@ def rename(id, name):
     if wall:
         wall.name = name
         wall.put()
+    return wall
 
 def find(unique_id):
     return Wall.gql('WHERE unique_id = :1', unique_id).get()

@@ -5,7 +5,6 @@
     <title>Scrwall - Everytime you share, share more</title>
     <link href="/static/style.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="/images/favicon.ico" />
-
 </head>
 
 <body>
@@ -53,7 +52,7 @@
         <div id="collections">
             <ol>
                 {% for wall in latest %}
-                <li>{{wall.name}}</li>
+                <li><a href="/c/{{wall.unique_id}}">{{wall.name}}</a></li>
                 {% endfor %}
             </ol>
         </div>
