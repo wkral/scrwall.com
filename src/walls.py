@@ -3,7 +3,7 @@ from model import *
 ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
 def create(name):
-    w = Wall(name=name)
+    w = Wall(name=name, item_count=0)
     w.put()
     w.unique_id = get_string_id(w.key().id(), ALPHABET);
     w.put()
@@ -11,9 +11,13 @@ def create(name):
 
 def add_url(id, url):
     if(url.startswith('http://')):
-        wall = find(id)
+        wall = fetch(id)
         if wall:
-            WallItem(wall=wall, url=url).put()
+            wall.item_count += 1
+            item = WallItem(id=wall.item_count, wall=wall, url=url)
+            item.put()
+            wall.put()
+            return item
     else:
         raise ValueError('Must be a well formatted URL')
 
@@ -24,7 +28,7 @@ def rename(id, name):
         wall.put()
     return wall
 
-def find(unique_id):
+def fetch(unique_id):
     return Wall.gql('WHERE unique_id = :1', unique_id).get()
 
 def get_latest(n):

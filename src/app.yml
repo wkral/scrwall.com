@@ -19,5 +19,8 @@ handlers:
 - url: /test
   static_dir: test
 
+- url: /res/.*
+  script: resources.py
+
 - url: /.*
   script: view.py

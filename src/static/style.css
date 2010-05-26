@@ -196,7 +196,7 @@ img.middle {
 
 #collections {
     width:385px;
-    height:150px;
+    min-height:150px;
     padding:5px 15px 0px 15px;
     margin-bottom:20px;
     text-align:left;
