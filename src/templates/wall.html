@@ -2,54 +2,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml"> 
 <head> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-    <title>Scrwall - Everytime you share, share more</title> 
+    <title>{{wall.name}} - Scrwall</title> 
     <link href="/static/style2.css" rel="stylesheet" type="text/css" /> 
     <link rel="shortcut icon" href="/images/favicon.ico" /> 
     <script src="/js/jquery-1.4.js" type="text/javascript" charset="utf-8"></script> 
     <script src="/js/json2.js" type="text/javascript" charset="utf-8"></script> 
+    <script src="/js/boxes.js" type="text/javascript" charset="utf-8"></script> 
+    <script src="/js/bsp-tree.js" type="text/javascript" charset="utf-8"></script> 
+    <script src="/js/spiral-layout.js" type="text/javascript" charset="utf-8"></script> 
+    <script src="/js/scrwall.js" type="text/javascript" charset="utf-8"></script> 
     <script src="/js/jquery.defaultvalue.js" type="text/javascript" charset="utf-8"></script> 
     <script type="text/javascript"> 
-        /* <![CDATA[ */
         var wall = {
             "name": "{{wall.name}}",
             "unique_id": "{{wall.unique_id}}",
             "created": "{{wall.created}}"
         };
-        
-        jQuery(function() {
-            $("#coll-name").defaultvalue(wall.name);
-            $("#img-url").defaultvalue("Drop your image URLs here");
-            
-            $('#collname form').submit(function (e) {
-                var form = $(this)
-                wall.name = $('#coll-name').val();
-                $.ajax({
-                    type: form.attr('method'),
-                    url: form.attr('action'),
-                    data: JSON.stringify(wall),
-                    success: function() {
-                        $('#coll-name').defaultvalue(wall.name);
-                    }
-                });
-                e.preventDefault();
-                return false;
-            }); 
-
-            $('#imgurl form').submit(function (e) {
-                var form = $(this)
-                var item = {"url": $('#img-url').val()};
-                $.ajax({
-                    type: form.attr('method'),
-                    url: form.attr('action'),
-                    data: JSON.stringify(item),
-                    success: function() {
-                    }
-                });
-                e.preventDefault();
-                return false;
-            }); 
-        });
-        /* ]]> */
+        var items = [
+            {% for item in wall.items %}'{{item.url}}',
+            {% endfor %}
+        ]
     </script>  
 </head> 
 <body> 
@@ -72,12 +44,13 @@
             <a id="startbtn" href="#"></a>
         </div> 
     </div>
+    <div id="body"></div>
     <div class="container">
         <div id="main">
-            <div id="message" class="message">
+            <!--div id="message" class="message">
                 Oops, we don't currently allow that, but we're aware of it now and will try to make it happen.
                 <a href="#">Let us know exactly how you wanted to use it</a>
-            </div> 
+            </div--> 
             <div id="collname">
                 <form method="PUT" action="/res/collections/{{wall.unique_id}}">
                     <input type="text" name="name" id="coll-name" value="" size="25" maxlength="100" /> 
@@ -90,8 +63,9 @@
                     <input type="submit" value="SAVE" /> 
                 </form> 
             </div> 
-            <div id="collurl" class="message"> 
-                http://scrwall.com/c/{{wall.unique_id}} <input type="button" value="COPY" /> 
+            <div id="collurl"> 
+                <div id="coll-url">http://scrwall.com/c/{{wall.unique_id}}</div>
+                <input type="button" value="COPY" /> 
             </div>
         </div>
     </div>
