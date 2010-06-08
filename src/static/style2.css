@@ -82,7 +82,9 @@ p {
 	border-bottom-color:#1491c6;
 	position: fixed;
 	width: 100%;
-    z-index: 1001;
+    z-index: 1002;
+    -webkit-box-shadow: 0px 2px 10px #000;
+    -moz-box-shadow: 0px 2px 10px #000;
 }
 
 .container {
@@ -125,6 +127,8 @@ p {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size:14px;
 	color:#f4f4f4;
+    -webkit-box-shadow: 2px 2px 15px #000;
+    -moz-box-shadow: 2px 2px 15px #000;
 }
 
 
@@ -195,13 +199,21 @@ input[type="button"], input[type="submit"] {
 	font-family: "LeagueGothicRegular", arial narrow, Arial, Helvetica, sans-serif;
 	font-size: 16px;
 	background-color: #3eb2e3;
-	border: 0px solid #cbcbcb;
-	background-image: url('/images/input_btn.png');
+	border: 1px solid #1491c6;
+	background: url('/images/input_btn.png') left top no-repeat;
 	width: 36px;
 	height: 25px;
 	color: #fff;
 	padding: 0px;
     margin-left: 3px;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+    background: url('/images/input_btn.png') 0px -25px no-repeat;
+}
+
+input[type="submit"].loading {
+    background: url('/images/loading_btn.gif') left top; 
 }
 
 .item {

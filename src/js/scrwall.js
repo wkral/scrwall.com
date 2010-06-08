@@ -65,12 +65,16 @@ $(window).resize(function() {
 });
 
 $(function() {
-  
+    //pre-cache the image
+    new Image().src = '/images/loading_btn.gif';
+     
     $("#coll-name").defaultvalue(wall.name);
     $("#img-url").defaultvalue("Drop your image URLs here");
     
     $('#collname form').submit(function (e) {
+
         var form = $(this)
+        form.find('input[type="submit"]').attr('disabled', 'true').addClass('loading');
         wall.name = $('#coll-name').val();
         $.ajax({
             type: form.attr('method'),
@@ -79,6 +83,7 @@ $(function() {
             success: function() {
                 $('#coll-name').defaultvalue(wall.name);
                 $('head title').text(wall.name);
+                form.find('input[type="submit"]').removeAttr('disabled').removeClass('loading');
             }
         });
         e.preventDefault();
@@ -87,6 +92,7 @@ $(function() {
 
     $('#imgurl form').submit(function (e) {
         var form = $(this)
+        form.find('input[type="submit"]').attr('disabled', 'true').addClass('loading');
         var item = {"url": $('#img-url').val()};
         $.ajax({
             type: form.attr('method'),
@@ -95,6 +101,7 @@ $(function() {
             success: function() {
                 addItem(item.url);
                 $("#img-url").defaultvalue("Drop your image URLs here");
+                form.find('input[type="submit"]').removeAttr('disabled').removeClass('loading');
             }
         });
         e.preventDefault();

@@ -16,6 +16,8 @@ class ResourceHandler(webapp.RequestHandler):
         self.response.out.write(utils.get_json(obj, obj.__json_keys__()));
     def respond_bad_request(self, message):
         self.response.set_status(400, message)
+    def respond_ok(self):
+        self.response.set_status(200)
 
 def wall_uri(wall):
     return '/res/collections/%s' % wall.unique_id
@@ -40,6 +42,7 @@ class WallResource(ResourceHandler):
             wall = walls.fetch(wall_id)
             wall.name = wall_obj['name']
             wall.put()
+            self.respond_ok()
         except ValueError:
             self.respond_bad_request('Request did not contain JSON')
 
