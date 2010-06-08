@@ -47,10 +47,11 @@
     <div id="body"></div>
     <div class="container">
         <div id="main">
-            <!--div id="message" class="message">
-                Oops, we don't currently allow that, but we're aware of it now and will try to make it happen.
-                <a href="#">Let us know exactly how you wanted to use it</a>
-            </div--> 
+            <div id="message" class="message">
+                <span id="msgtxt"></span>
+                <a href="#">Probably our fault, let us know what should happend</a>
+                <a id="closemsg" href="#">[close]</a>
+            </div> 
             <div id="collname">
                 <form method="PUT" action="/res/collections/{{wall.unique_id}}">
                     <input type="text" name="name" id="coll-name" value="" size="25" maxlength="100" /> 

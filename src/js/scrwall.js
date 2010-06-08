@@ -69,10 +69,11 @@ $(function() {
     new Image().src = '/images/loading_btn.gif';
      
     $("#coll-name").defaultvalue(wall.name);
-    $("#img-url").defaultvalue("Drop your image URLs here");
+    $("#img-url").defaultvalue("Paste your image URLs here");
     
     $('#collname form').submit(function (e) {
 
+        $('#message').slideUp('fast');
         var form = $(this)
         form.find('input[type="submit"]').attr('disabled', 'true').addClass('loading');
         wall.name = $('#coll-name').val();
@@ -90,7 +91,12 @@ $(function() {
         return false;
     }); 
 
+    $('#closemsg').click(function() {
+        $('#message').slideUp('fast');
+    });
+
     $('#imgurl form').submit(function (e) {
+        $('#message').slideUp('fast');
         var form = $(this)
         form.find('input[type="submit"]').attr('disabled', 'true').addClass('loading');
         var item = {"url": $('#img-url').val()};
@@ -102,6 +108,11 @@ $(function() {
                 addItem(item.url);
                 $("#img-url").defaultvalue("Drop your image URLs here");
                 form.find('input[type="submit"]').removeAttr('disabled').removeClass('loading');
+            },
+            error: function() {
+                form.find('input[type="submit"]').removeAttr('disabled').removeClass('loading');
+                $('#msgtxt').text('The url you provided didn\'t quite work could you try again?');
+                $('#message').slideDown('fast');
             }
         });
         e.preventDefault();
