@@ -68,8 +68,8 @@ $(function() {
     //pre-cache the image
     new Image().src = '/images/loading_btn.gif';
      
-    $("#coll-name").defaultvalue(wall.name);
-    $("#img-url").defaultvalue("Paste your image URLs here");
+    $('#coll-name').defaultvalue(wall.name == '' ? 'Name your collection' : wall.name);
+    $('#img-url').defaultvalue('Paste your image URLs here');
     
     $('#collname form').submit(function (e) {
 

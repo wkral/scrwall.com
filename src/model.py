@@ -1,7 +1,8 @@
 from google.appengine.ext import db
 
 class Wall(db.Model):
-    name = db.StringProperty(required=True)
+    name = db.StringProperty()
+    name_set = db.BooleanProperty()
     unique_id = db.StringProperty()
     created = db.DateTimeProperty(auto_now_add=True)
     item_count = db.IntegerProperty()

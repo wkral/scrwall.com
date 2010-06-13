@@ -12,7 +12,7 @@ class Handler(webapp.RequestHandler):
 
 class NewWall(Handler):
     def post(self):
-        wall = walls.create('Untitled Collection')
+        wall = walls.create()
         self.redirect('/c/%s' % wall.unique_id)
 
 class Wall(Handler):

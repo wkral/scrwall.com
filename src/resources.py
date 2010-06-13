@@ -38,9 +38,10 @@ class WallResource(ResourceHandler):
         self.respond_json(walls.fetch(wall_id))
     def put(self, wall_id):
         try:
-            wall_obj = json.loads(self.request.body)        
+            wall_obj = json.loads(self.request.body) 
             wall = walls.fetch(wall_id)
             wall.name = wall_obj['name']
+            wall.name_set = True
             wall.put()
             self.respond_ok()
         except ValueError:
