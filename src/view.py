@@ -9,6 +9,8 @@ class Handler(webapp.RequestHandler):
     def respond(self, file, values):
         self.response.headers['Content-Type'] = 'text/html'
         self.response.out.write(template.render('templates/%s' % file, values))
+    def respond_not_found(self):
+        self.response.set_status(404)
 
 class NewWall(Handler):
     def post(self):
@@ -18,7 +20,10 @@ class NewWall(Handler):
 class Wall(Handler):
     def get(self, wall_id):
         wall = walls.fetch(wall_id)
-        self.respond('wall.html', {'wall': wall})
+        if wall:
+            self.respond('wall.html', {'wall': wall})
+        else:
+            self.respond_not_found()
 
 class HomePage(Handler):
     def get(self):

@@ -4,6 +4,7 @@ from google.appengine.ext.webapp import template
 import walls
 import json
 import logging
+import utils
 
 class ResourceHandler(webapp.RequestHandler):
     def respond_created(self, uri):
@@ -14,8 +15,14 @@ class ResourceHandler(webapp.RequestHandler):
         self.response.set_status(200)
         self.response.headers['Content-Type'] = 'text/json'
         self.response.out.write(utils.get_json(obj, obj.__json_keys__()));
+    def respond_list(self, lst):
+        self.response.set_status(200)
+        self.response.headers['Content-Type'] = 'text/json'
+        self.response.out.write(json.dumps(lst))
     def respond_bad_request(self, message):
         self.response.set_status(400, message)
+    def respond_not_found(self):
+        self.response.set_status(404)
     def respond_ok(self):
         self.response.set_status(200)
 
@@ -23,19 +30,30 @@ def wall_uri(wall):
     return '/res/collections/%s' % wall.unique_id
 
 def item_uri(item):
-    return '/res/collections/%s/items/%s' % (item.wall.unique_id, item.id)
+    return '/res/collections/%s/items/%d' % (item.wall.unique_id, item.id)
+
+def feedback_uri(feedback):
+    return '/res/feedback/%s' % feedback.id
 
 class WallsResource(ResourceHandler):
     def get(self):
-        map(wall_uri, walls.get_latest(10))
+        wall_list = map(wall_uri, walls.get_latest(10))
+        self.respond_list(wall_list)
     def post(self):
-        wall_obj = json.loads(self.request.body)
-        wall = walls.create(wall['name'])
-        self.respond_created(wall_uri(wall))
+        try:
+            wall_obj = json.loads(self.request.body)
+            wall = walls.create(wall_obj['name'])
+            self.respond_created(wall_uri(wall))
+        except ValueError:
+            self.respond_bad_request('Request did not contain valid JSON')
 
 class WallResource(ResourceHandler):
     def get(self, wall_id):
-        self.respond_json(walls.fetch(wall_id))
+        w = walls.fetch(wall_id)
+        if w:
+            self.respond_json(w)
+        else:
+            self.respond_not_found()
     def put(self, wall_id):
         try:
             wall_obj = json.loads(self.request.body) 
@@ -45,24 +63,35 @@ class WallResource(ResourceHandler):
             wall.put()
             self.respond_ok()
         except ValueError:
-            self.respond_bad_request('Request did not contain JSON')
+            self.respond_bad_request('Request did not contain valid JSON')
 
 class ItemsResource(ResourceHandler):
     def post(self, wall_id):
         try:
             wall_obj = json.loads(self.request.body)
+            try:
+                item = walls.add_url(wall_id, wall_obj['url'])
+                self.respond_created(item_uri(item))
+            except ValueError:
+                self.respond_bad_request('Url was malformed')
         except ValueError:
-            self.respond_bad_request('Request did not contain JSON')
+            self.respond_bad_request('Request did not contain valid JSON')
+
+class FeedbackResource(ResourceHandler):
+    def post(self):
         try:
-            item = walls.add_url(wall_id, wall_obj['url'])
-            self.respond_created(item_uri(item))
+            fb = json.loads(self.request.body)
+            feedback = walls.create_feedback(fb['comment'], fb['name'], fb['email'])
+            self.respond_created(feedback_uri(feedback))
         except ValueError:
-            self.respond_bad_request('Url was malformed')
+            self.respond_bad_request('Request did not contain valid JSON')
+
 urls = [
     ('/res/collections/(.*)/items', ItemsResource),
 #    ('/res/collections/(.*)/items/(.*)', ItemResource),
     ('/res/collections', WallsResource),
-    ('/res/collections/(.*)', WallResource)
+    ('/res/collections/(.*)', WallResource),
+    ('/res/feedback', FeedbackResource)
 ]
 
 def application():

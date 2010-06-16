@@ -23,19 +23,19 @@ class TestWalls():
             assert c in walls.ALPHABET
 
     def test_find_wall(self):
-        w = walls.find(self.wall.unique_id)
+        w = walls.fetch(self.wall.unique_id)
         assert self.wall.name == w.name
 
     def test_add_url(self):
         walls.add_url(self.wall.unique_id, URL1)
-        w = walls.find(self.wall.unique_id)
+        w = walls.fetch(self.wall.unique_id)
         eq_(w.items.count(), 1)
         eq_(w.items[0].url, URL1)
 
     def test_add_two_urls(self):
         walls.add_url(self.wall.unique_id, URL1)
         walls.add_url(self.wall.unique_id, URL2)
-        w = walls.find(self.wall.unique_id)
+        w = walls.fetch(self.wall.unique_id)
         eq_(w.items.count(), 2)
         eq_(w.items[0].url, URL1)
         eq_(w.items[1].url, URL2)

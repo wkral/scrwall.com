@@ -3,7 +3,7 @@ from model import *
 ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
 def create(name=''):
-    w = Wall(name=name, name_set=False, item_count=0)
+    w = Wall(name=name, name_set=len(name) > 0, item_count=0)
     w.put()
     w.unique_id = get_string_id(w.key().id(), ALPHABET);
     w.put()
@@ -50,3 +50,9 @@ def get_string_id(n, alphabet):
     arr.reverse()
     return ''.join(arr)
 
+def create_feedback(comment, name='', email=''):
+    feedback = Feedback(comment=comment, name=name, email=email)
+    feedback.put()
+    feedback.id = feedback.key().id()
+    feedback.put()
+    return feedback

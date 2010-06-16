@@ -29,7 +29,6 @@ a:hover {
 a.navlinks {
 	font-size:18px;
 	color:#b5e9ff;
-	letter-spacing:0px;
 	text-transform:uppercase;
 	margin-left: 9px;
 }
@@ -83,8 +82,8 @@ p {
 	position: fixed;
 	width: 100%;
     z-index: 1002;
-    -webkit-box-shadow: 0px 0px 15px #000;
-    -moz-box-shadow: 0px 0px 15px #000;
+    -webkit-box-shadow: 0px 0px 10px #333;
+    -moz-box-shadow: 0px 0px 10px #333;
 }
 
 .container {
@@ -127,8 +126,8 @@ p {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size:14px;
 	color:#f4f4f4;
-    -webkit-box-shadow: 0px 0px 15px #000;
-    -moz-box-shadow: 0px 0px 15px #000;
+    -webkit-box-shadow: 0px 0px 10px #555;
+    -moz-box-shadow: 0px 0px 10px #555;
 }
 
 

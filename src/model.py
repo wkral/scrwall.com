@@ -15,3 +15,9 @@ class WallItem(db.Model):
     wall = db.ReferenceProperty(Wall, collection_name='items')
     def __json_keys__(self):
         return ['url']
+
+class Feedback(db.Model):
+    name = db.StringProperty()
+    email = db.EmailProperty()
+    comment = db.TextProperty()
+
