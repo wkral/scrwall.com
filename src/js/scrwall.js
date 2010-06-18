@@ -67,24 +67,41 @@ $(window).resize(function() {
 $(function() {
     //pre-cache the image
     new Image().src = '/images/loading_btn.gif';
+
+    var defaultValue = function(el, value) {
+        el.data('defaultValue', value);
+        el.val(value);
+        el.focus(function () {
+            var input = $(this);
+            if(input.val() == input.data('defaultValue')) {
+                input.val('');
+            }
+        });
+        el.blur(function () {
+            var input = $(this);
+            if(input.val() == '') {
+                input.val(input.data('defaultValue'));
+            }
+        });
+    };
      
-    $('#coll-name').defaultvalue(wall.name == '' ? 'Name your collection' : wall.name);
-    $('#img-url').defaultvalue('Paste your image URLs here');
+    defaultValue($('#coll-name'), wall.name == '' ? 'Name your collection' : wall.name);
+    defaultValue($('#img-url'), 'Paste your image URLs here');
     
     $('#collname form').submit(function (e) {
 
         $('#message').slideUp('fast');
         var form = $(this)
-        form.find('input[type="submit"]').attr('disabled', 'true').addClass('loading');
+        form.find('.button').attr('disabled', 'true').addClass('loading');
         wall.name = $('#coll-name').val();
         $.ajax({
             type: form.attr('method'),
             url: form.attr('action'),
             data: JSON.stringify(wall),
             success: function() {
-                $('#coll-name').defaultvalue(wall.name);
-                $('head title').text(wall.name);
-                form.find('input[type="submit"]').removeAttr('disabled').removeClass('loading');
+                defaultValue($('#coll-name'), wall.name);
+                $('title').text(wall.name + ' - Scrwall');
+                form.find('.button').removeAttr('disabled').removeClass('loading');
             }
         });
         e.preventDefault();
@@ -98,7 +115,7 @@ $(function() {
     $('#imgurl form').submit(function (e) {
         $('#message').slideUp('fast');
         var form = $(this)
-        form.find('input[type="submit"]').attr('disabled', 'true').addClass('loading');
+        form.find('.button').attr('disabled', 'true').addClass('loading');
         var item = {"url": $('#img-url').val()};
         $.ajax({
             type: form.attr('method'),
@@ -106,11 +123,11 @@ $(function() {
             data: JSON.stringify(item),
             success: function() {
                 addItem(item.url);
-                $("#img-url").defaultvalue("Drop your image URLs here");
-                form.find('input[type="submit"]').removeAttr('disabled').removeClass('loading');
+                $("#img-url").val('').trigger('blur');
+                form.find('.button').removeAttr('disabled').removeClass('loading');
             },
             error: function() {
-                form.find('input[type="submit"]').removeAttr('disabled').removeClass('loading');
+                form.find('.button').removeAttr('disabled').removeClass('loading');
                 $('#msgtxt').text('The url you provided didn\'t quite work could you try again?');
                 $('#message').slideDown('fast');
             }
@@ -118,6 +135,20 @@ $(function() {
         e.preventDefault();
         return false;
     });
+
+    $('.feedback').click(function (e) {
+        $('#overlay').fadeIn('fast');
+        e.preventDefault();
+        return false;
+    });
+
+    $('#close-feedback').click(function (e) {
+        $('#overlay').css('display', 'none');
+        e.preventDefault();
+        return false;
+    });
+
+
     var body = $('#body');
 
     var win = $(window);
@@ -155,24 +186,7 @@ $(function() {
 
     body.data('layout', SpiralLayout(PADDING, MARGIN));
     
-    $.each(/*[
-        'http://static.jquery.com/files/rocker/images/logo_jquery_215x53.gif',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kx1o246h871qza6kro1_500_large.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/killer_ring.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/enhanced_penulum_channel.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/1238997252979083.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/1254078432801366.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/27605bbce5a1c3f75c383967c48d1b62_l.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/paradise_now-2.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/a342f0c470b7535ee05ead326c1e2c3d_l.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/tumblr_kwuahsjxnv1qzs56do1_500.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/fb66aed811d982341fcb4c3621c97090_l.png',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/xfvl90.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/3140453fce7b7a8b5719c3ed49a3b53e_l.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/9eb0a9b8728ced5ce590c41b7a69f16d_l.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/1244249870410811.jpg',
-        'http://waytoogood.ca/wp-content/gallery/inspiration/0e210818795129a0fce6edc182684600_l.png'
-    ]*/items, function () {
+    $.each(items, function () {
         addItem(this);
     });
 });

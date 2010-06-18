@@ -22,10 +22,11 @@ body {
     padding:0;
 }
 
-p {
-    margin:0px;
-    padding:0px;
-}
+p + h3 { margin-top:20px; }
+
+h3 + p { margin-top:10px; }
+
+p + p { margin-top:15px; }
 
 a {
     font-size:14px;
@@ -48,6 +49,7 @@ a.navlinks {
     text-shadow: #2babe2 0px 1px 0px;
     letter-spacing:0px;
     vertical-align:middle;
+    margin-left: 10px;
 }
 
 a.navlinks:hover {
@@ -98,6 +100,7 @@ h2 {
     letter-spacing:0px;
     line-height:60px;
     vertical-align:middle;
+    margin-left: 8px;
 }
 
 img.middle {
@@ -148,6 +151,43 @@ img.middle {
     border-left: 1px solid #9b9b9b;
     background-image:url('../images/main_bg.jpg');
     background-repeat:repeat-x;
+}
+
+#about {
+	float:left;
+	width:530px;
+	height:auto;
+	padding:15px 15px 0px 0px;
+	margin-bottom:20px;
+}
+
+h3 {
+	font-family: "LeagueGothicRegular", arial narrow, sans-serif;
+	font-size:40px;
+	color:#0b7fb1;
+	letter-spacing:0px;
+	text-transform:uppercase;
+	margin:0px 0px 0px 0px;
+	line-height:40px;
+}
+
+#main-title {
+	background-color: #c7c7c7;
+	-moz-border-radius-bottomleft: 10px;
+	-moz-border-radius-bottomright: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	border-top: 0px;
+	border-right: 1px solid #9b9b9b;
+	border-bottom: 1px solid #6e6e6e;
+	border-left: 1px solid #9b9b9b;
+	background-image:url('/images/main_bg.jpg');
+	background-repeat:repeat-x;
+	float:right;
+	width:375px;
+	height:260px;
+	padding:15px 15px 15px 15px;
+	text-align:center;
 }
 
 #screenshot {

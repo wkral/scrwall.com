@@ -2,16 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"> 
 <head> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-    <title>{{wall.name}} - Scrwall</title> 
+    <title>{% if wall.name %}{{wall.name}} - {% endif %}Scrwall</title> 
     <link href="/static/style2.css" rel="stylesheet" type="text/css" /> 
     <link rel="shortcut icon" href="/images/favicon.ico" /> 
-    <script src="/js/jquery-1.4.js" type="text/javascript" charset="utf-8"></script> 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script> 
     <script src="/js/json2.js" type="text/javascript" charset="utf-8"></script> 
     <script src="/js/boxes.js" type="text/javascript" charset="utf-8"></script> 
     <script src="/js/bsp-tree.js" type="text/javascript" charset="utf-8"></script> 
     <script src="/js/spiral-layout.js" type="text/javascript" charset="utf-8"></script> 
     <script src="/js/scrwall.js" type="text/javascript" charset="utf-8"></script> 
-    <script src="/js/jquery.defaultvalue.js" type="text/javascript" charset="utf-8"></script> 
     <script type="text/javascript"> 
         var wall = {
             "name": "{{wall.name}}",
@@ -24,22 +23,46 @@
         ]
     </script>  
 </head> 
-<body> 
+<body>
+    <div id="overlay">
+        <div id="commentbox">
+            <a href="#" id="close-feedback" ></a>
+            <h3>Help us make Scrwall better</h3> 
+            <form action="/res/feedback" method="post" id="commentform"> 
+                <p>
+                    <label for="data" class="long">Let us know what we messed up, or maybe even got right</label>
+                    <textarea name="comment" id="comment" cols="80" rows="7" tabindex="3"></textarea>		
+                </p>
+                <p>
+                    If you'd like to hear back from us about your comment, please provide your contact infomration and we'll let you know what we're doing. Totally Optional.
+                </p>
+                <p>
+                    <label for="author">Your Name</label>
+                    <input type="text" name="author" id="author" value="" tabindex="1" class="input" />
+                </p> 
+ 
+			    <p>
+                    <label for="email">Your Email</label>
+                    <input type="text" name="email" id="email" value="" tabindex="2" class="input" />
+                    <input name="submit" class="button" type="submit" id="sendfeedback" value="SEND" /> 
+                </p> 
+	        </form> 
+        </div> 
+        
+    </div>
     <div id="header"> 
         <div class="container"> 
             <div id="header_nav" class="navlinks">
-                <a class="navlinks" href="http://www.twitter.com/scrwall">Feedback</a>
-                <a class="navlinks" href="http://www.facebook.com/scrwall">Twitter</a>
-                <a class="navlinks" href="http://www.facebook.com/scrwall">Facebook</a>
-                <a class="navlinks" href="http://www.facebook.com/scrwall">Legal</a>
+                <a class="navlinks feedback" href="#">Feedback</a>
+                <a class="navlinks" href="http://twitter.com/scrwall">Twitter</a>
+                <a class="navlinks" href="http://facebook.com/pages/Scrwall/351290708175">Facebook</a>
+                <a class="navlinks" href="/static/legal.html">Legal</a>
             </div>
             <div id="logo">
-                <p>
-                    <a href="/">
-                        <img src="/images/logo_big.png" id="logo-img" alt="Scrwall" class="middle" />
-                    </a>
-                    <span class="tagline"><em>everytime you share, share more</em></span>
-                </p> 
+                <a href="/">
+                    <img src="/images/logo_big.png" id="logo-img" alt="Scrwall" class="middle" />
+                </a>
+                <span class="tagline"><em>everytime you share, share more</em></span>
             </div> 
             <a id="startbtn" href="#"></a>
         </div> 
@@ -47,26 +70,25 @@
     <div id="body"></div>
     <div class="container">
         <div id="main">
-            <div id="message" class="message">
+            <div id="message">
                 <span id="msgtxt"></span>
-                <a href="#">Probably our fault, let us know what should happend</a>
-                <a id="closemsg" href="#">[close]</a>
+                <a href="#" class="feedback">Probably our fault, let us know what should happend</a>
+                <a id="closemsg" href="#"></a>
             </div> 
             <div id="collname">
                 <form method="PUT" action="/res/collections/{{wall.unique_id}}">
-                    <input type="text" name="name" id="coll-name" value="" size="25" maxlength="100" /> 
-                    <input type="submit" value="SAVE" /> 
+                    <input type="text" class="header-input" name="name" id="coll-name" value="" size="25" maxlength="100" /> 
+                    <input type="submit" class="button" value="SAVE" /> 
                 </form> 
             </div> 
             <div id="imgurl"> 
                 <form method="POST" action="/res/collections/{{wall.unique_id}}/items"> 
-                    <input type="text" name="item" id="img-url" value="" size="25" maxlength="255" /> 
-                    <input type="submit" value="ADD" /> 
+                    <input type="text" class="header-input" name="item" id="img-url" value="" size="25" maxlength="255" /> 
+                    <input type="submit" class="button" value="ADD" /> 
                 </form> 
             </div> 
             <div id="collurl"> 
                 <div id="coll-url">http://scrwall.com/c/{{wall.unique_id}}</div>
-                <input type="button" value="COPY" /> 
             </div>
         </div>
     </div>

@@ -1,7 +1,7 @@
 from webtest import TestApp
 from resources import application
 import re
-import helper
+from helper import *
 import walls
 
 app = TestApp(application())
@@ -37,16 +37,13 @@ feedback_json = '''
 }
 '''
 
-def assert_status(response, expected):
-    assert '%d' % expected in response.status, 'expecting response: %d' % expected
-
 class TestWalls():
 
     def setup(self):
         self.wall = walls.create(WALL_NAME)
         self.url = '/res/collections/%s' % self.wall.unique_id
     def teardown(self):
-        helper.clean_db()
+        clean_db()
     def test_get_collections(self):
         response = app.get('/res/collections')
         assert_status(response, 200)
@@ -93,7 +90,7 @@ class TestFeedback():
     def setup(self):
         pass
     def teardown(self):
-        helper.clean_db()
+        clean_db()
     def test_post(self):
         response = app.post('/res/feedback', feedback_json)
         assert_status(response, 201)
