@@ -1,6 +1,7 @@
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
+from django.template import TemplateDoesNotExist
 import walls
 import logging
 
@@ -29,10 +30,18 @@ class HomePage(Handler):
     def get(self):
         self.respond('index.html', {'latest': walls.get_latest(10)})
 
+class OtherPages(Handler):
+    def get(self, name):
+        try:
+            self.respond(name + '.html', {})
+        except TemplateDoesNotExist:
+            self.respond_not_found()
+
 urls = [
     ('/c', NewWall),
     ('/c/(.*)', Wall),
-    ('/', HomePage)
+    ('/', HomePage),
+    ('/([^./#]*)', OtherPages)
 ]
 
 def application():

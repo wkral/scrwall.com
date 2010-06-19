@@ -1,4 +1,4 @@
-application: scrwall
+application: scr-wall
 version: 1
 runtime: python
 api_version: 1
@@ -6,15 +6,20 @@ api_version: 1
 handlers:
 - url: /js
   static_dir: js
+  expiration: 7d
 
 - url: /static
   static_dir: static
+  expiration: 7d
 
 - url: /images
   static_dir: images
+  expiration: 7d
 
 - url: /font-face
   static_dir: font-face
+  expiration: 7d
+  mime_type: application/x-woff 
 
 - url: /test
   static_dir: test

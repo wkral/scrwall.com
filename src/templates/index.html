@@ -1,32 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Scrwall - Everytime you share, share more</title>
-        <link href="/static/style.css" rel="stylesheet" type="text/css" />
-        <link rel="shortcut icon" href="/images/favicon.ico" />
-    </head>
-    <body>
-        <div id="header">
-            <div class="container">
-                <div id="header_nav" class="navlinks">
-                    <a class="navlinks" href="http://www.twitter.com/scrwall">
-                        <img src="/images/twitter_icon.png" alt="Follow Us on Twitter" />
-                        FOLLOW US
-                    </a>
-                    <a class="navlinks" href="http://www.facebook.com/scrwall">
-                        <img src="/images/fbook_icon.png" alt="Find Us on Facebook" />
-                        FIND US
-                    </a>
-                </div>
-                <div id="logo">
-                        <a href="/">
-                            <img class="middle" src="images/logo_big.png" alt="Scrwall" />
-                        </a>
-                        <span class="tagline"><em>everytime you share, share more</em></span>
-                </div>
-            </div>
-        </div>
+{% extends "base.extend" %}
+{% block content %}
         <div id="main" class="container">
             <div id="screenshot">
                 <img src="images/scrwall_screen.jpg" alt="Scrwall Collection" />
@@ -39,7 +12,7 @@
                         <input type="submit" id="startbtn" value="" />
                     </div>
                 </form>
-                <a href="/static/faq.html">>> Learn more about using Scrwall</a>
+                <a href="/faq">>> Learn more about using Scrwall</a>
                 <br /><br />
                 <span class="small"><em>*Scrwall is pronounced "scrawl"</em></span>
             </div>
@@ -55,24 +28,5 @@
                 </ol>
             </div>
         </div>
-        <div id="footer">
-            <div class="container">
-                <div id="footer_right" class="footlinks">
-                    &copy; 2010 SCRWALL &nbsp; |
-                    <a class="footlinks" href="/static/legal.html#terms">TERMS</a>
-                    <a class="footlinks" href="/static/legal.html#privacy">PRIVACY</a>
-                </div>
-                <div id="footer_logo">
-                    <a href="/">
-                        <img src="images/logo_footer.png" alt="Scrwall" />
-                    </a>
-                </div>
-                <div id="footer_left" class="footlinks">
-                    <a class="footlinks" href="/static/faq.html">FAQ</a>
-                    <a class="footlinks" href="/">CONTACT</a>
-                    <a class="footlinks" href="/">FEEDBACK</a>
-                </div>
-            </div>
-        </div>
-    </body>
-</html>
+{% endblock %}
+
