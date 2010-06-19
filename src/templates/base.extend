@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Scrwall - Everytime you share, share more</title>
+        <link href="/static/style.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/images/favicon.ico" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+            $(function () {
+                $('.feedback').click(function (e) {
+                    $('#overlay').fadeIn('fast');
+                    e.preventDefault();
+                    return false;
+                });
+
+                $('#close-feedback').click(function (e) {
+                    $('#overlay').css('display', 'none');
+                    e.preventDefault();
+                    return false;
+                });
+            });
+        </script>
+
+    </head>
+    <body>
+        {% include "feedback.include" %}
+ 	    <div id="header">
+            <div class="container">
+                <div id="header_nav" class="navlinks">
+                    <a class="navlinks" href="http://www.twitter.com/scrwall">
+                        <img src="/images/twitter_icon.png" alt="Follow Us on Twitter" />
+                        FOLLOW US
+                    </a>
+                    <a class="navlinks" href="http://www.facebook.com/pages/Scrwall/351290708175">
+                        <img src="/images/fbook_icon.png" alt="Find Us on Facebook" />
+                        FIND US
+                    </a>
+                </div>
+                <div id="logo">
+                    <a href="/">
+                        <img class="middle" src="/images/logo_big.png" alt="Scrwall" />
+                    </a>
+                    <span class="tagline"><em>everytime you share, share more</em></span>
+                </div>
+            </div>
+	    </div>
+        {% block content %}
+        {% endblock %}
+        <div id="footer">
+            <div class="container">
+                <div id="footer_right" class="footlinks">
+                    &copy; 2010 SCRWALL &nbsp; |
+                    <a class="footlinks" href="/legal">TERMS</a>
+                    <a class="footlinks" href="/legal#privacy">PRIVACY</a>
+                </div>
+                <div id="footer_logo">
+                    <a href="/">
+                        <img src="/images/logo_footer.png" alt="Scrwall" />
+                    </a>
+                </div>
+                <div id="footer_left" class="footlinks">
+                    <a class="footlinks" href="/faq">FAQ</a>
+                    <a class="footlinks feedback" href="#">FEEDBACK</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

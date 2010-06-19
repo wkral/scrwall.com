@@ -20,32 +20,7 @@
     </script>  
 </head> 
 <body>
-    <div id="overlay">
-        <div id="commentbox">
-            <a href="#" id="close-feedback" ></a>
-            <h3>Help us make Scrwall better</h3> 
-            <form action="/res/feedback" method="post" id="commentform"> 
-                <p>
-                    <label for="data" class="long">Let us know what we messed up, or maybe even got right</label>
-                    <textarea name="comment" id="comment" cols="80" rows="7" tabindex="3"></textarea>		
-                </p>
-                <p>
-                    If you'd like to hear back from us about your comment, please provide your contact infomration and we'll let you know what we're doing. Totally Optional.
-                </p>
-                <p>
-                    <label for="author">Your Name</label>
-                    <input type="text" name="author" id="author" value="" tabindex="1" class="input" />
-                </p> 
- 
-			    <p>
-                    <label for="email">Your Email</label>
-                    <input type="text" name="email" id="email" value="" tabindex="2" class="input" />
-                    <input name="submit" class="button" type="submit" id="sendfeedback" value="SEND" /> 
-                </p> 
-	        </form> 
-        </div> 
-        
-    </div>
+    {% include "feedback.include" %}
     <div id="header"> 
         <div class="container"> 
             <div id="header_nav" class="navlinks">

@@ -1,0 +1,10 @@
+            <div id="main-title">
+                <h1 class="title1">An easy way to</h1>
+                <h1 class="title2">collect &amp; share</h1>        
+                <form action="/c" method="post">
+                    <div>
+                        <input type="submit" id="startbtn" value="" />
+                    </div>
+                </form>
+            </div>
+
