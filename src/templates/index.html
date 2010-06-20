@@ -1,32 +1,32 @@
 {% extends "base.extend" %}
 {% block content %}
-        <div id="main" class="container">
-            <div id="screenshot">
-                <img src="images/scrwall_screen.jpg" alt="Scrwall Collection" />
+<div id="main" class="container">
+    <div id="screenshot">
+        <img src="images/scrwall_screen.jpg" alt="Scrwall Collection" />
+    </div>
+    <div id="content">
+        <h1 class="title1">An easy way to</h1>
+        <h1 class="title2">collect &amp; share</h1>
+        <form action="c" method="post">
+            <div>
+                <input type="submit" id="startbtn" value="" />
             </div>
-            <div id="content">
-                <h1 class="title1">An easy way to</h1>
-                <h1 class="title2">collect &amp; share</h1>
-                <form action="c" method="post">
-                    <div>
-                        <input type="submit" id="startbtn" value="" />
-                    </div>
-                </form>
-                <a href="/faq">>> Learn more about using Scrwall</a>
-                <br /><br />
-                <span class="small"><em>*Scrwall is pronounced "scrawl"</em></span>
-            </div>
-        </div>
-        <div class="container">
-            <div id="newcollec">
-                <h2>Recent Scrwall Collections</h2>
-            </div>
-            <div id="collections">
-                <ol>
-                    {% for wall in latest %}<li><a href="/c/{{wall.unique_id}}">{{wall.name}}</a></li>
-                    {% endfor %}
-                </ol>
-            </div>
-        </div>
+        </form>
+        <a href="/faq">>> Learn more about using Scrwall</a>
+        <br /><br />
+        <span class="small"><em>*Scrwall is pronounced "scrawl"</em></span>
+    </div>
+</div>
+<div class="container">
+    <div id="newcollec">
+        <h2>Recent Scrwall Collections</h2>
+    </div>
+    <div id="collections">
+        <ol>
+            {% for wall in latest %}<li><a href="/c/{{wall.unique_id}}">{{wall.name}}</a></li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
 {% endblock %}
 

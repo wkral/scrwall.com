@@ -148,6 +148,31 @@ $(function() {
         return false;
     });
 
+    $('#commentform').submit(function (e) {
+        var form = $(this)
+        form.find('.button').attr('disabled', 'true').addClass('loading');
+        var feedback = {
+            "comment": $('#feedback_comment').val(),
+            "name": $('#feedback_name').val(),
+            "email": $('#feedback_email').val()
+        };
+        $.ajax({
+            type: form.attr('method'),
+            url: form.attr('action'),
+            data: JSON.stringify(feedback),
+            success: function() {
+                form.find('.button').removeAttr('disabled').removeClass('loading');
+                $('#overlay').fadeOut('fast');
+            },
+            error: function() {
+                form.find('.button').removeAttr('disabled').removeClass('loading');
+                $('#overlay').fadeOut('fast');
+            }
+        });
+        e.preventDefault();
+        return false;
+
+    });
 
     var body = $('#body');
 

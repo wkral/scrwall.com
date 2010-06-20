@@ -1,0 +1,6 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/boxes.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/json2.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/bsp-tree.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/scrwall.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/spiral-layout.js" type="text/javascript" charset="utf-8"></script>

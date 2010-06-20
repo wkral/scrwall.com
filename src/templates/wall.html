@@ -1,67 +1,66 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml"> 
-<head> 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-    <title>{% if wall.name %}{{wall.name}} - {% endif %}Scrwall</title> 
-    <link href="/static/style2.css" rel="stylesheet" type="text/css" /> 
-    <link rel="shortcut icon" href="/images/favicon.ico" /> 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script> 
-    <script src="/js/scrwall-min.js" type="text/javascript" charset="utf-8"></script> 
-    <script type="text/javascript"> 
-        var wall = {
-            "name": "{{wall.name}}",
-            "unique_id": "{{wall.unique_id}}",
-            "created": "{{wall.created}}"
-        };
-        var items = [
-            {% for item in wall.items %}'{{item.url}}',
-            {% endfor %}
-        ]
-    </script>  
-</head> 
-<body>
-    {% include "feedback.include" %}
-    <div id="header"> 
-        <div class="container"> 
-            <div id="header_nav" class="navlinks">
-                <a class="navlinks feedback" href="#">Feedback</a>
-                <a class="navlinks" href="http://twitter.com/scrwall">Twitter</a>
-                <a class="navlinks" href="http://facebook.com/pages/Scrwall/351290708175">Facebook</a>
-                <a class="navlinks" href="/static/legal.html">Legal</a>
-            </div>
-            <div id="logo">
-                <a href="/">
-                    <img src="/images/logo_big.png" id="logo-img" alt="Scrwall" class="middle" />
-                </a>
-                <span class="tagline"><em>everytime you share, share more</em></span>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+        <title>{% if wall.name %}{{wall.name}} - {% endif %}Scrwall</title> 
+        <link href="/static/style2.css" rel="stylesheet" type="text/css" /> 
+        <link rel="shortcut icon" href="/images/favicon.ico" /> 
+        {% include "walljs.include" %}
+        <script type="text/javascript"> 
+            var wall = {
+                "name": "{{wall.name}}",
+                "unique_id": "{{wall.unique_id}}",
+                "created": "{{wall.created}}"
+            };
+            var items = [
+                {% for item in wall.items %}'{{item.url}}',
+                {% endfor %}
+            ]
+        </script>  
+    </head> 
+    <body>
+        {% include "feedback.include" %}
+        <div id="header"> 
+            <div class="container"> 
+                <div id="header_nav" class="navlinks">
+                    <a class="navlinks feedback" href="#">Feedback</a>
+                    <a class="navlinks" href="http://twitter.com/scrwall">Twitter</a>
+                    <a class="navlinks" href="http://facebook.com/pages/Scrwall/351290708175">Facebook</a>
+                    <a class="navlinks" href="/static/legal.html">Legal</a>
+                </div>
+                <div id="logo">
+                    <a href="/">
+                        <img src="/images/logo_big.png" id="logo-img" alt="Scrwall" class="middle" />
+                    </a>
+                    <span class="tagline"><em>everytime you share, share more</em></span>
+                </div> 
+                <a id="startbtn" href="#"></a>
             </div> 
-            <a id="startbtn" href="#"></a>
-        </div> 
-    </div>
-    <div id="body"></div>
-    <div class="container">
-        <div id="main">
-            <div id="message">
-                <span id="msgtxt"></span>
-                <a href="#" class="feedback">Probably our fault, let us know what should happend</a>
-                <a id="closemsg" href="#"></a>
-            </div> 
-            <div id="collname">
-                <form method="PUT" action="/res/collections/{{wall.unique_id}}">
-                    <input type="text" class="header-input" name="name" id="coll-name" value="" size="25" maxlength="100" /> 
-                    <input type="submit" class="button" value="SAVE" /> 
-                </form> 
-            </div> 
-            <div id="imgurl"> 
-                <form method="POST" action="/res/collections/{{wall.unique_id}}/items"> 
-                    <input type="text" class="header-input" name="item" id="img-url" value="" size="25" maxlength="255" /> 
-                    <input type="submit" class="button" value="ADD" /> 
-                </form> 
-            </div> 
-            <div id="collurl"> 
-                <div id="coll-url">http://scrwall.com/c/{{wall.unique_id}}</div>
+        </div>
+        <div id="body"></div>
+        <div class="container">
+            <div id="main">
+                <div id="message">
+                    <span id="msgtxt"></span>
+                    <a href="#" class="feedback">Probably our fault, let us know what should happend</a>
+                    <a id="closemsg" href="#"></a>
+                </div> 
+                <div id="collname">
+                    <form method="PUT" action="/res/collections/{{wall.unique_id}}">
+                        <input type="text" class="header-input" name="name" id="coll-name" value="" size="25" maxlength="100" /> 
+                        <input type="submit" class="button" value="SAVE" /> 
+                    </form> 
+                </div> 
+                <div id="imgurl"> 
+                    <form method="POST" action="/res/collections/{{wall.unique_id}}/items"> 
+                        <input type="text" class="header-input" name="item" id="img-url" value="" size="25" maxlength="255" /> 
+                        <input type="submit" class="button" value="ADD" /> 
+                    </form> 
+                </div> 
+                <div id="collurl"> 
+                    <div id="coll-url">http://scrwall.com/c/{{wall.unique_id}}</div>
+                </div>
             </div>
         </div>
-    </div>
-</body> 
+    </body> 
 </html>

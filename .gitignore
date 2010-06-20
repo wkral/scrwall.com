@@ -4,3 +4,4 @@ unittests.sh
 *.pyc
 *.DS_Store
 *.swp
+target
