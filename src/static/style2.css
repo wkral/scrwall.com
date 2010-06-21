@@ -240,7 +240,9 @@ body {
 	height: 34px;
 	margin-top: 9px;
 	background: url('/images/start_btn_small.png') top center no-repeat; left: 10px;
+    border: none;
 }
+
 #startbtn:hover {
 	background: url('/images/start_btn_small.png') 0px -40px no-repeat;
 }
