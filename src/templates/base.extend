@@ -5,9 +5,12 @@
         <title>Scrwall - Everytime you share, share more</title>
         <link href="/static/style.css" rel="stylesheet" type="text/css" />
         <link rel="shortcut icon" href="/images/favicon.ico" />
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        {% include "basejs.include" %}
         <script type="text/javascript" charset="utf-8">
             $(function () {
+                //pre-cache the image
+                new Image().src = '/images/loading_btn.gif';
+
                 $('.feedback').click(function (e) {
                     $('#overlay').fadeIn('fast');
                     e.preventDefault();
@@ -19,8 +22,35 @@
                     e.preventDefault();
                     return false;
                 });
-            });
-        </script>
+                
+                $('#commentform').submit(function (e) {
+                    var form = $(this)
+                    form.find('.button').attr('disabled', 'true').addClass('loading');
+                    var feedback = {
+                        "comment": $('#feedback_comment').val(),
+                        "name": $('#feedback_name').val(),
+                        "email": $('#feedback_email').val()
+                    };
+                    $.ajax({
+                        type: form.attr('method'),
+                        url: form.attr('action'),
+                        data: JSON.stringify(feedback),
+                        success: function() {
+                            form.find('.button').removeAttr('disabled').removeClass('loading');
+                            $('#overlay').fadeOut('fast');
+                        },
+                        error: function() {
+                            form.find('.button').removeAttr('disabled').removeClass('loading');
+                            $('#overlay').fadeOut('fast');
+                        }
+                    });
+                    e.preventDefault();
+                    return false;
+
+               });
+
+           });
+       </script>
 
     </head>
     <body>

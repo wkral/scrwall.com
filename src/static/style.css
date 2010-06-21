@@ -110,6 +110,14 @@ label.long {
     float: left;
 }
 
+.button:hover {
+    background: url('/images/input_btn.png') 0px -25px no-repeat;
+}
+
+.button.loading {
+    background: url('/images/loading_btn.gif') left top; 
+}
+
 p + h3 { margin-top:20px; }
 
 h3 + p { margin-top:10px; }
