@@ -74,7 +74,7 @@ label.long {
     width: auto;
 }
 
-#comment {
+#feedback_comment {
     width: 545px;
     height: 110px;
 }
@@ -126,7 +126,6 @@ body {
 	font-family:"LeagueGothicRegular", 'arial narrow', sans-serif, Arial, Helvetica, sans-serif;
 	color:#444;
 	font-size:18px;
-	line-height:22px;
 	margin:0;
 	padding:0;
     overflow: hidden;
@@ -189,6 +188,7 @@ body {
 	color:#f4f4f4;
     -webkit-box-shadow: 0px 0px 10px #555;
     -moz-box-shadow: 0px 0px 10px #555;
+	line-height:22px;
 }
 
 
@@ -241,6 +241,7 @@ body {
 	margin-top: 9px;
 	background: url('/images/start_btn_small.png') top center no-repeat; left: 10px;
     border: none;
+    cursor: pointer;
 }
 
 #startbtn:hover {
@@ -286,6 +287,7 @@ input[type="text"] {
 	padding: 0px;
     margin-left: 3px;
     float: left;
+    cursor: pointer;
 }
 
 .button:hover {
@@ -301,6 +303,10 @@ input[type="text"] {
     padding: 10px;
     position: absolute;
     cursor: pointer;
+}
+
+.item img {
+    display: block;
 }
 
 #body {

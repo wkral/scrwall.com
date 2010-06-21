@@ -86,7 +86,7 @@ label.long {
     width: auto;
 }
 
-#comment {
+#feedback_comment {
     width: 545px;
     height: 110px;
 }
@@ -108,6 +108,7 @@ label.long {
 	padding: 0px;
     margin-left: 3px;
     float: left;
+    cursor: pointer;
 }
 
 .button:hover {
@@ -308,6 +309,7 @@ h3 {
     display: block;
     border: 0px solid black;
     margin: 18px auto;
+    cursor: pointer;
 }
 
 #startbtn:hover {
