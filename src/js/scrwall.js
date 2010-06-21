@@ -17,7 +17,7 @@ function startDrag(e) {
         x: e.pageX,
         y: e.pageY
     });
-    body.css('cursor', '-moz-grabbing');
+    body.addClass('grabbing');
     stopEvent(e);
 }
 
@@ -26,7 +26,7 @@ function stopDrag(e) {
     var cursor = body.data('cursor');
     cursor.mousedown = false;
     body.data('cursor', cursor);
-    body.css('cursor', '-moz-grab');
+    body.removeClass('grabbing');
     stopEvent(e);
 }
 
