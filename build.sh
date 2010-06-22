@@ -7,7 +7,7 @@ if [ -d target ]; then
 fi
 mkdir $target
 
-for file in "*.py" "*.yaml" "*.yml" "static" "images" "templates"
+for file in "*.py" "*.yaml" "static" "images" "templates"
 do
     cp -r $source/$file $target
 done
