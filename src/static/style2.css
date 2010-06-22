@@ -313,9 +313,6 @@ input[type="text"] {
     position: absolute;
     top: 52px;
     width: 100%;
-    cursor: -moz-grab;
+    cursor: all-scroll;
 }
 
-#body.grabbing {
-    cursor: -moz-grabbing;
-}

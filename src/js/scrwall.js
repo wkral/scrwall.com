@@ -1,10 +1,6 @@
 var PADDING = 11;
 var MARGIN = 10;
 
-function log(message) {
-    $('#debug').text(message);
-}
-
 function stopEvent(e) {
     e.stopPropagation();
     e.preventDefault();
@@ -17,7 +13,6 @@ function startDrag(e) {
         x: e.pageX,
         y: e.pageY
     });
-    body.addClass('grabbing');
     stopEvent(e);
 }
 
@@ -26,13 +21,11 @@ function stopDrag(e) {
     var cursor = body.data('cursor');
     cursor.mousedown = false;
     body.data('cursor', cursor);
-    body.removeClass('grabbing');
     stopEvent(e);
 }
 
 function drag(e) {
     var body = $('#body');
-    log('moving the mouse');
     var cursor = body.data('cursor');
     var position = body.data('position');
     if(cursor.mousedown) {
@@ -42,7 +35,6 @@ function drag(e) {
         cursor.y = e.pageY;
         position.offsetX += diffX;
         position.offsetY += diffY;
-        log(e.pageX + ', ' + e.pageY);
         $('.item').each(function() {
             var item = $(this);
             var left = item.data('left');
@@ -99,8 +91,10 @@ $(function() {
             url: form.attr('action'),
             data: JSON.stringify(wall),
             success: function() {
-                defaultValue($('#coll-name'), wall.name);
                 $('title').text(wall.name + ' - Scrwall');
+                form.find('.button').removeAttr('disabled').removeClass('loading');
+            },
+            error: function() {
                 form.find('.button').removeAttr('disabled').removeClass('loading');
             }
         });
@@ -123,7 +117,7 @@ $(function() {
             data: JSON.stringify(item),
             success: function() {
                 addItem(item.url);
-                $("#img-url").val('').trigger('blur');
+                $("#img-url").val('').blur();
                 form.find('.button').removeAttr('disabled').removeClass('loading');
             },
             error: function() {
@@ -183,7 +177,8 @@ $(function() {
             'height': win.height() + 'px',
             'width': win.width() +'px',
             'z-index': 1000,
-            'position': 'absolute'
+            'position': 'absolute',
+            'overflow': 'scroll'
         },
         click: function() {
             $('input[type="text"]').blur();
