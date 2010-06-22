@@ -125,6 +125,17 @@ h3 + p { margin-top:10px; }
 
 p + p { margin-top:15px; }
 
+ul.about {
+    padding-left: 20px;
+}
+
+ul.about li {
+    margin: 10px 0px;
+}
+
+.inline {
+    color: #999;
+}
 a {
     font-size:14px;
     color:#494949;

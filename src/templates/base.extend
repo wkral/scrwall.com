@@ -90,7 +90,7 @@
                     </a>
                 </div>
                 <div id="footer_left" class="footlinks">
-                    <a class="footlinks" href="/faq">FAQ</a>
+                    <a class="footlinks" href="/faq#faq">FAQ</a>
                     <a class="footlinks feedback" href="#">FEEDBACK</a>
                 </div>
             </div>
