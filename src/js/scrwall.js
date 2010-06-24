@@ -103,11 +103,19 @@ $(function() {
             var top = item.top + MARGIN;
             var left = item.left + MARGIN;
             domItem.css('top', top + position.offsetY + 'px');
-            domItem.css('left', left + position.offsetX +'px');
+            domItem.css('left', left + position.offsetX + 'px');
             domItem.data('top', top);
             domItem.data('left', left);
+            
+            var centerX = item.left + item.width / 2;
+            var centerY = item.top + item.height / 2;
+
+            var deltaX = -centerX - position.offsetX + body.width() / 2;
+            var deltaY = -centerY - position.offsetY + body.height() / 2;
 
             body.append(domItem);
+            
+            funcs.move(deltaX, deltaY);
         }
     };
      
