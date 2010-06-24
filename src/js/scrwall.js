@@ -111,9 +111,13 @@ $(function() {
         }
     };
      
-    funcs.defaultValue($('#coll-name'), wall.name == '' ? 'Name your collection' : wall.name);
+    funcs.defaultValue($('#coll-name'), 'Name your collection');
     funcs.defaultValue($('#img-url'), 'Paste your image URLs here');
-    
+   
+    if(wall.name != '') {
+        $('#coll-name').val(wall.name);
+    }
+
     $('#collname form').submit(function (e) {
 
         $('#message').slideUp('fast');
