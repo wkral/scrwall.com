@@ -35,8 +35,15 @@
     -moz-border-radius: 10px;
     margin: 100px auto;
     padding: 15px;
+    font-size: 15px;
 	background: #C7C7C7 url('/images/main_bg.jpg');
     background-repeat: repeat-x;
+	font-family: Arial, Helvetica, sans-serif;
+    line-height: 22px;
+}
+
+p + p {
+    margin-top: 15px;
 }
 
 #close-feedback, #closemsg {
@@ -58,6 +65,7 @@ h3 {
     text-transform:uppercase;
     margin:0px 0px 10px 0px;
     line-height:40px;
+    font-family: "LeagueGothicRegular", 'arial narrow', sans-serif, Arial, Helvetica, sans-serif;
 }
 
 label {
@@ -68,6 +76,8 @@ label {
     margin-right: 10px;
     margin-top: 3px;
     text-align: right;
+    font-family: "LeagueGothicRegular", 'arial narrow', sans-serif, Arial, Helvetica, sans-serif;
+    font-size: 18px;
 }
 
 label.long {
