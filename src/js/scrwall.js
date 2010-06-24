@@ -180,8 +180,7 @@ $(function() {
             'height': win.height() + 'px',
             'width': win.width() +'px',
             'z-index': 1000,
-            'position': 'absolute',
-            'overflow': 'scroll'
+            'position': 'absolute'
         },
         click: function() {
             $('input[type="text"]').blur();
