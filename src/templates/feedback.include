@@ -8,7 +8,7 @@
                 <textarea name="comment" id="feedback_comment" cols="80" rows="7" tabindex="1"></textarea>		
             </p>
             <p>
-                If you'd like to hear back from us about your comment, please provide your contact infomration and we'll let you know what we're doing. Totally Optional.
+                If you'd like to hear back from us about your comment, please provide your contact information and we'll let you know what we're doing. Totally Optional.
             </p>
             <p>
                 <label for="author">Your Name</label>
