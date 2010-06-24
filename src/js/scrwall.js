@@ -1,55 +1,3 @@
-var PADDING = 11;
-var MARGIN = 10;
-
-function stopEvent(e) {
-    e.stopPropagation();
-    e.preventDefault();
-}
-
-function startDrag(e) {
-    var body = $('#body');
-    body.data('cursor', {
-        mousedown: true,
-        x: e.pageX,
-        y: e.pageY
-    });
-    stopEvent(e);
-}
-
-function stopDrag(e) {
-    var body = $('#body');
-    var cursor = body.data('cursor');
-    cursor.mousedown = false;
-    body.data('cursor', cursor);
-    stopEvent(e);
-}
-
-function drag(e) {
-    var body = $('#body');
-    var cursor = body.data('cursor');
-    if(cursor.mousedown) {
-        var deltaX = e.pageX - cursor.x;
-        var deltaY = e.pageY - cursor.y;
-        cursor.x = e.pageX;
-        cursor.y = e.pageY;
-        move(deltaX, deltaY);
-    }
-    stopEvent(e);
-}
-
-function move(deltaX, deltaY) {
-    var position = $('#body').data('position');
-    position.offsetX += deltaX;
-    position.offsetY += deltaY;
-    $('.item').each(function() {
-        var item = $(this);
-        var left = item.data('left');
-        var top = item.data('top');
-        item.css('left', (left + position.offsetX) + 'px');
-        item.css('top', (top + position.offsetY) + 'px');
-    });
-}
-
 $(window).resize(function() {
     var win = $(window);
     var header = $('#header');
@@ -64,25 +12,107 @@ $(function() {
     //pre-cache the image
     new Image().src = '/images/loading_btn.gif';
 
-    var defaultValue = function(el, value) {
-        el.data('defaultValue', value);
-        el.val(value);
-        el.focus(function () {
-            var input = $(this);
-            if(input.val() == input.data('defaultValue')) {
-                input.val('');
+    var PADDING = 11;
+    var MARGIN = 10;
+
+    var funcs = {
+        defaultValue: function(el, value) {
+            el.data('defaultValue', value);
+            el.val(value);
+            el.focus(function () {
+                var input = $(this);
+                if(input.val() == input.data('defaultValue')) {
+                    input.val('');
+                }
+            });
+            el.blur(function () {
+                var input = $(this);
+                if(input.val() == '') {
+                    input.val(input.data('defaultValue'));
+                }
+            });
+        },
+        stopEvent: function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        },
+        startDrag: function(e) {
+            var body = $('#body');
+            body.data('cursor', {
+                mousedown: true,
+                x: e.pageX,
+                y: e.pageY
+            });
+            funcs.stopEvent(e);
+        },
+        stopDrag: function(e) {
+            var body = $('#body');
+            var cursor = body.data('cursor');
+            cursor.mousedown = false;
+            body.data('cursor', cursor);
+            funcs.stopEvent(e);
+        },
+        drag: function(e) {
+            var body = $('#body');
+            var cursor = body.data('cursor');
+            if(cursor.mousedown) {
+                var deltaX = e.pageX - cursor.x;
+                var deltaY = e.pageY - cursor.y;
+                cursor.x = e.pageX;
+                cursor.y = e.pageY;
+                funcs.move(deltaX, deltaY);
             }
-        });
-        el.blur(function () {
-            var input = $(this);
-            if(input.val() == '') {
-                input.val(input.data('defaultValue'));
-            }
-        });
+            funcs.stopEvent(e);
+        },
+        move: function(deltaX, deltaY) {
+            var position = $('#body').data('position');
+            position.offsetX += deltaX;
+            position.offsetY += deltaY;
+            $('.item').each(function() {
+                var item = $(this);
+                var left = item.data('left');
+                var top = item.data('top');
+                item.css('left', (left + position.offsetX) + 'px');
+                item.css('top', (top + position.offsetY) + 'px');
+            });
+        },
+        addItem: function(url) {
+            var image = new Image();
+            $(image).attr({
+                src: url,
+                alt: 'Collection Item'
+            });
+            $(image).load(funcs.loadImage);
+        },
+        loadImage: function() {
+
+            var domItem = $('<div>', {
+                'class': 'item'
+            }).append($(this));
+
+            var body = $('#body');
+
+            var layout = body.data('layout');
+
+            var position = body.data('position');
+
+            var box_padding = (MARGIN + PADDING) * 2;
+
+            var item = layout.add(this.width + box_padding, this.height + box_padding);
+
+            var top = item.top + MARGIN;
+            var left = item.left + MARGIN;
+            domItem.css('top', top + position.offsetY + 'px');
+            domItem.css('left', left + position.offsetX +'px');
+            domItem.data('top', top);
+            domItem.data('left', left);
+
+            body.append(domItem);
+        }
     };
      
-    defaultValue($('#coll-name'), wall.name == '' ? 'Name your collection' : wall.name);
-    defaultValue($('#img-url'), 'Paste your image URLs here');
+    funcs.defaultValue($('#coll-name'), wall.name == '' ? 'Name your collection' : wall.name);
+    funcs.defaultValue($('#img-url'), 'Paste your image URLs here');
     
     $('#collname form').submit(function (e) {
 
@@ -120,7 +150,7 @@ $(function() {
             url: form.attr('action'),
             data: JSON.stringify(item),
             success: function() {
-                addItem(item.url);
+                funcs.addItem(item.url);
                 $("#img-url").val('').blur();
                 form.find('.button').removeAttr('disabled').removeClass('loading');
             },
@@ -186,19 +216,19 @@ $(function() {
         click: function() {
             $('input[type="text"]').blur();
         },
-        mousedown: startDrag,
-        mouseout: stopDrag,
-        mouseup: stopDrag,
-        mousemove: drag
+        mousedown: funcs.startDrag,
+        mouseout: funcs.stopDrag,
+        mouseup: funcs.stopDrag,
+        mousemove: funcs.drag
     });
     cover.get(0).addEventListener('mousewheel', function (e) {
-        move(e.wheelDeltaX / 60, e.wheelDeltaY / 60);
+        funcs.move(e.wheelDeltaX / 60, e.wheelDeltaY / 60);
     }, true);
     window.addEventListener('DOMMouseScroll', function (e) {
         if(e.axis == e.HORIZONTAL_AXIS) {
-            move(e.detail * -3, 0);
+            funcs.move(e.detail * -3, 0);
         } else {
-            move(0, e.detail * -3);
+            funcs.move(0, e.detail * -3);
         }
     }, true);
 
@@ -220,42 +250,8 @@ $(function() {
     body.data('layout', SpiralLayout(PADDING, MARGIN));
     
     $.each(items, function () {
-        addItem(this);
+        funcs.addItem(this);
     });
 });
 
-function addItem(url) {
-    var image = new Image();
-    $(image).attr({
-        src: url,
-        alt: 'Collection Item'
-    });
-    $(image).load(loadImage);
-}
-
-function loadImage() {
-
-    var domItem = $('<div>', {
-        'class': 'item'
-    }).append($(this));
-
-    var body = $('#body');
-
-    var layout = body.data('layout');
-
-    var position = body.data('position');
-
-    var box_padding = (MARGIN + PADDING) * 2;
-
-    var item = layout.add(this.width + box_padding, this.height + box_padding);
-
-    var top = item.top + MARGIN;
-    var left = item.left + MARGIN;
-    domItem.css('top', top + position.offsetY + 'px');
-    domItem.css('left', left + position.offsetX +'px');
-    domItem.data('top', top);
-    domItem.data('left', left);
-
-    body.append(domItem);
-}
 
