@@ -27,23 +27,27 @@ function stopDrag(e) {
 function drag(e) {
     var body = $('#body');
     var cursor = body.data('cursor');
-    var position = body.data('position');
     if(cursor.mousedown) {
-        var diffX = e.pageX - cursor.x;
-        var diffY = e.pageY - cursor.y;
+        var deltaX = e.pageX - cursor.x;
+        var deltaY = e.pageY - cursor.y;
         cursor.x = e.pageX;
         cursor.y = e.pageY;
-        position.offsetX += diffX;
-        position.offsetY += diffY;
-        $('.item').each(function() {
-            var item = $(this);
-            var left = item.data('left');
-            var top = item.data('top');
-            item.css('left', (left + position.offsetX) + 'px');
-            item.css('top', (top + position.offsetY) + 'px');
-        });
+        move(deltaX, deltaY);
     }
     stopEvent(e);
+}
+
+function move(deltaX, deltaY) {
+    var position = $('#body').data('position');
+    position.offsetX += deltaX;
+    position.offsetY += deltaY;
+    $('.item').each(function() {
+        var item = $(this);
+        var left = item.data('left');
+        var top = item.data('top');
+        item.css('left', (left + position.offsetX) + 'px');
+        item.css('top', (top + position.offsetY) + 'px');
+    });
 }
 
 $(window).resize(function() {
@@ -177,8 +181,7 @@ $(function() {
             'height': win.height() + 'px',
             'width': win.width() +'px',
             'z-index': 1000,
-            'position': 'absolute',
-            'overflow': 'scroll'
+            'position': 'absolute'
         },
         click: function() {
             $('input[type="text"]').blur();
@@ -188,6 +191,16 @@ $(function() {
         mouseup: stopDrag,
         mousemove: drag
     });
+    cover.get(0).addEventListener('mousewheel', function (e) {
+        move(e.wheelDeltaX / 60, e.wheelDeltaY / 60);
+    }, true);
+    window.addEventListener('DOMMouseScroll', function (e) {
+        if(e.axis == e.HORIZONTAL_AXIS) {
+            move(e.detail * -3, 0);
+        } else {
+            move(0, e.detail * -3);
+        }
+    }, true);
 
     body.css('height', (win.height() - $('#header').height()) + 'px');
 
