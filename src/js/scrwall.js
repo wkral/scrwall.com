@@ -15,6 +15,9 @@ $(function() {
     var PADDING = 11;
     var MARGIN = 10;
 
+    //dirty global until I figure something better
+    var LOADING_QUEUE = 0;
+
     var funcs = {
         defaultValue: function(el, value) {
             el.data('defaultValue', value);
@@ -83,6 +86,7 @@ $(function() {
                 alt: 'Collection Item'
             });
             $(image).load(funcs.loadImage);
+            LOADING_QUEUE++;
         },
         loadImage: function() {
 
@@ -114,8 +118,40 @@ $(function() {
             var deltaY = -centerY - position.offsetY + body.height() / 2;
 
             body.append(domItem);
+
+            LOADING_QUEUE--;
+
+            if(LOADING_QUEUE <= 0) {
+                mover.move(deltaX, deltaY);
+            }
+        }
+    };
+
+    var mover = {
+        step: null,
+        timeout: null,
+        move: function(deltaX, deltaY) {
+            var stepX = deltaX / 50;
+            var stepY = deltaY / 50;
             
-            funcs.move(deltaX, deltaY);
+            clearTimeout(this.timeout);
+            this.step = {x: stepX, y: stepY, count: 50};
+            this.proceed();
+        },
+        proceed: function() {
+            if(mover.step != null) {
+                var step = mover.step;
+                funcs.move(step.x, step.y);
+                step.count--;
+                var time = 5;
+                if(step.count < 10) {
+                    time = time * (10 - step.count);
+                }
+                if(step.count <= 0) {
+                    mover.step = null;
+                }
+                mover.timeout = window.setTimeout(mover.proceed, time);
+            }
         }
     };
      
