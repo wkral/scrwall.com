@@ -2,7 +2,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import walls
-import json
+from django.utils import simplejson as json
 import logging
 import utils
 
@@ -18,7 +18,8 @@ class ResourceHandler(webapp.RequestHandler):
     def respond_list(self, lst):
         self.response.set_status(200)
         self.response.headers['Content-Type'] = 'text/json'
-        self.response.out.write(json.dumps(lst))
+        output = json.dumps(lst)
+        self.response.out.write(output.replace('\\/', '/'))
     def respond_bad_request(self, message):
         self.response.set_status(400, message)
     def respond_not_found(self):
