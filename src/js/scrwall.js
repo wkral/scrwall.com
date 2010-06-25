@@ -56,6 +56,7 @@ $(function() {
             funcs.stopEvent(e);
         },
         drag: function(e) {
+            mover.cancel();
             var body = $('#body');
             var cursor = body.data('cursor');
             if(cursor.mousedown) {
@@ -134,7 +135,7 @@ $(function() {
             var stepX = deltaX / 50;
             var stepY = deltaY / 50;
             
-            clearTimeout(this.timeout);
+            window.clearTimeout(this.timeout);
             this.step = {x: stepX, y: stepY, count: 50};
             this.proceed();
         },
@@ -152,6 +153,9 @@ $(function() {
                 }
                 mover.timeout = window.setTimeout(mover.proceed, time);
             }
+        },
+        cancel: function() {
+            window.clearTimeout(this.timeout);
         }
     };
      
