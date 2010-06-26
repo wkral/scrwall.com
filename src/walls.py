@@ -50,7 +50,9 @@ def get_string_id(n, alphabet):
     arr.reverse()
     return ''.join(arr)
 
-def create_feedback(comment, name='', email=''):
+def create_feedback(comment, name=None, email=None):
+    name = name if name != '' else None
+    email = email if email != '' else None
     feedback = Feedback(comment=comment, name=name, email=email)
     feedback.put()
     feedback.id = feedback.key().id()

@@ -37,6 +37,14 @@ feedback_json = '''
 }
 '''
 
+feedback_missing = '''
+{
+    "name": "",
+    "email": "",
+    "comment": "I like it"
+}
+'''
+
 class TestWalls():
 
     def setup(self):
@@ -93,6 +101,9 @@ class TestFeedback():
         clean_db()
     def test_post(self):
         response = app.post('/res/feedback', feedback_json)
+        assert_status(response, 201)
+    def test_post_missing(self):
+        response = app.post('/res/feedback', feedback_missing)
         assert_status(response, 201)
     def test_bad_post(self):
         response = app.post('/res/feedback', 'This is not json', status=400)
