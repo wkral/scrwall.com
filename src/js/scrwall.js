@@ -80,20 +80,35 @@ $(function() {
                 item.css('top', (top + position.offsetY) + 'px');
             });
         },
-        addItem: function(url) {
+        addItem: function(url, callback) {
             var image = new Image();
             $(image).attr({
                 src: url,
                 alt: 'Collection Item'
             });
-            $(image).load(funcs.loadImage);
-            LOADING_QUEUE++;
+            $(image).load(callback);
         },
-        loadImage: function() {
+        loadExistingImage: function() {
+            funcs.appendImage(this);
+        },
+        loadNewImage: function() {
+            var item = funcs.appendImage(this);
 
+            var body = $('#body');
+            var position = body.data('position');
+
+            var centerX = item.left + item.width / 2;
+            var centerY = item.top + item.height / 2;
+
+            var deltaX = -centerX - position.offsetX + body.width() / 2;
+            var deltaY = -centerY - position.offsetY + body.height() / 2;
+
+            mover.move(deltaX, deltaY);
+        },
+        appendImage: function(img) {
             var domItem = $('<div>', {
                 'class': 'item'
-            }).append($(this));
+            }).append($(img));
 
             var body = $('#body');
 
@@ -103,7 +118,7 @@ $(function() {
 
             var box_padding = (MARGIN + PADDING) * 2;
 
-            var item = layout.add(this.width + box_padding, this.height + box_padding);
+            var item = layout.add(img.width + box_padding, img.height + box_padding);
 
             var top = item.top + MARGIN;
             var left = item.left + MARGIN;
@@ -111,20 +126,9 @@ $(function() {
             domItem.css('left', left + position.offsetX + 'px');
             domItem.data('top', top);
             domItem.data('left', left);
-            
-            var centerX = item.left + item.width / 2;
-            var centerY = item.top + item.height / 2;
-
-            var deltaX = -centerX - position.offsetX + body.width() / 2;
-            var deltaY = -centerY - position.offsetY + body.height() / 2;
 
             body.append(domItem);
-
-            LOADING_QUEUE--;
-
-            if(LOADING_QUEUE <= 0) {
-                mover.move(deltaX, deltaY);
-            }
+            return item;
         }
     };
 
@@ -202,7 +206,7 @@ $(function() {
             url: form.attr('action'),
             data: JSON.stringify(item),
             success: function() {
-                funcs.addItem(item.url);
+                funcs.addItem(item.url, funcs.loadNewImage);
                 $("#img-url").val('').blur();
                 form.find('.button').removeAttr('disabled').removeClass('loading');
             },
@@ -302,7 +306,7 @@ $(function() {
     body.data('layout', SpiralLayout(PADDING, MARGIN));
     
     $.each(items, function () {
-        funcs.addItem(this);
+        funcs.addItem(this, funcs.loadExistingImage);
     });
 });
 
