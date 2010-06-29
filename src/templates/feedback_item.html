@@ -1,0 +1,10 @@
+{% extends "base.extend" %}
+{% block content %}
+<div class="container">
+    <div id="about">
+        <h3>{{feedback.name}} - {{feedback.email}}</h3>
+        <p>{{feedback.created|date:"r"}}</p>
+        <p>{{feedback.comment}}</p>
+    </div>
+</div>
+{% endblock %}

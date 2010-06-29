@@ -1,0 +1,12 @@
+{% extends "base.extend" %}
+{% block content %}
+<div class="container">
+    <div id="about">
+        {% for f in feedback %}
+        <h3>{{f.name}} - {{f.email}}</h3>
+        <a href="/feedback/{{f.id}}"><p>{{f.created|date:"r"}}</p></a>
+        <p>{{f.comment}}</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
