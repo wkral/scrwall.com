@@ -17,7 +17,8 @@ class WallItem(db.Model):
         return ['url']
 
 class Feedback(db.Model):
+    id = db.IntegerProperty()
     name = db.StringProperty()
     email = db.EmailProperty()
     comment = db.TextProperty()
-
+    created = db.DateTimeProperty(auto_now_add=True)

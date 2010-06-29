@@ -2,6 +2,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 import walls
+import feedback
 from django.utils import simplejson as json
 import logging
 import utils
@@ -81,9 +82,9 @@ class ItemsResource(ResourceHandler):
 class FeedbackResource(ResourceHandler):
     def post(self):
         try:
-            fb = json.loads(self.request.body)
-            feedback = walls.create_feedback(fb['comment'], fb['name'], fb['email'])
-            self.respond_created(feedback_uri(feedback))
+            fb_obj = json.loads(self.request.body)
+            fb = feedback.create(fb_obj['comment'], fb_obj['name'], fb_obj['email'])
+            self.respond_created(feedback_uri(fb))
         except ValueError:
             self.respond_bad_request('Request did not contain valid JSON')
 

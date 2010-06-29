@@ -1,5 +1,5 @@
 application: scr-wall
-version: 2
+version: 3
 runtime: python
 api_version: 1
 
@@ -21,6 +21,18 @@ handlers:
 
 - url: /res/.*
   script: resources.py
+
+- url: /feedback.*
+  script: feedback_view.py
+  login: admin
+
+- url: /favicon.ico
+  static_files: images/favicon.ico
+  upload: images/favicon.ico
+
+- url: /robots.txt
+  static_files: static/robots.txt
+  upload: static/robots.txt
 
 - url: /.*
   script: view.py
