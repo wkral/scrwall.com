@@ -15,9 +15,6 @@ $(function() {
     var PADDING = 11;
     var MARGIN = 10;
 
-    //dirty global until I figure something better
-    var LOADING_QUEUE = 0;
-
     var funcs = {
         defaultValue: function(el, value) {
             el.data('defaultValue', value);
