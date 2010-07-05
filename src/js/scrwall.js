@@ -35,6 +35,7 @@ $(function() {
         stopEvent: function(e) {
             e.stopPropagation();
             e.preventDefault();
+            return false;
         },
         startDrag: function(e) {
             var body = $('#body');
@@ -43,27 +44,28 @@ $(function() {
                 x: e.pageX,
                 y: e.pageY
             });
-            funcs.stopEvent(e);
+            return funcs.stopEvent(e);
         },
         stopDrag: function(e) {
             var body = $('#body');
             var cursor = body.data('cursor');
             cursor.mousedown = false;
             body.data('cursor', cursor);
-            funcs.stopEvent(e);
+            return funcs.stopEvent(e);
         },
         drag: function(e) {
             mover.cancel();
             var body = $('#body');
             var cursor = body.data('cursor');
             if(cursor.mousedown) {
+                body.data('dragged', true);
                 var deltaX = e.pageX - cursor.x;
                 var deltaY = e.pageY - cursor.y;
                 cursor.x = e.pageX;
                 cursor.y = e.pageY;
                 funcs.move(deltaX, deltaY);
             }
-            funcs.stopEvent(e);
+            return funcs.stopEvent(e);
         },
         move: function(deltaX, deltaY) {
             var position = $('#body').data('position');
@@ -77,13 +79,14 @@ $(function() {
                 item.css('top', (top + position.offsetY) + 'px');
             });
         },
-        addItem: function(url, callback) {
-            var image = new Image();
-            $(image).attr({
+        addItem: function(url, key, callback) {
+            var image = $(new Image());
+            image.attr({
                 src: url,
                 alt: 'Collection Item'
             });
-            $(image).load(callback);
+            image.load(callback);
+            image.data('key', key);
         },
         loadExistingImage: function() {
             funcs.appendImage(this);
@@ -103,9 +106,12 @@ $(function() {
             mover.move(deltaX, deltaY);
         },
         appendImage: function(img) {
+            var image = $(img);
+            var key = image.data('key');
             var domItem = $('<div>', {
-                'class': 'item'
-            }).append($(img));
+                'class': 'item',
+                id: 'item' + key
+            }).append(image);
 
             var body = $('#body');
 
@@ -115,7 +121,7 @@ $(function() {
 
             var box_padding = (MARGIN + PADDING) * 2;
 
-            var item = layout.add(img.width + box_padding, img.height + box_padding);
+            var item = layout.add(img.width + box_padding, img.height + box_padding, key);
 
             var top = item.top + MARGIN;
             var left = item.left + MARGIN;
@@ -125,6 +131,8 @@ $(function() {
             domItem.data('left', left);
 
             body.append(domItem);
+
+            $.extend(items[key], item);
             return item;
         }
     };
@@ -268,11 +276,24 @@ $(function() {
         },
         click: function(e) {
             $('input[type="text"]').blur();
-            alert(e.pageX + ' ' + e.pageY);
+            var body = $('#body');
+            if(body.data('dragged')) {
+                body.data('dragged', false);
+            } else {
+                var layout = body.data('layout');
+                var pos = body.data('position');
+                var item = layout.find(e.pageX - pos.offsetX, 
+                    e.pageY - body.position().top - pos.offsetY);
+                var orig = items[item.key];
+                alert(JSON.stringify(orig));
+            }
         },
         mousedown: funcs.startDrag,
-        mouseout: funcs.stopDrag,
         mouseup: funcs.stopDrag,
+        mouseout: function(e) {
+            $('#body').data('dragged', false);
+            return funcs.stopDrag(e);
+        },
         mousemove: funcs.drag
     });
     cover.get(0).addEventListener('mousewheel', function (e) {
@@ -303,8 +324,8 @@ $(function() {
 
     body.data('layout', SpiralLayout(PADDING, MARGIN));
     
-    $.each(items, function () {
-        funcs.addItem(this, funcs.loadExistingImage);
+    $.each(items, function (key, value) {
+        funcs.addItem(value.src, parseInt(key), funcs.loadExistingImage);
     });
 });
 

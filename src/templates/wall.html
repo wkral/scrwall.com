@@ -12,10 +12,12 @@
                 "unique_id": "{{wall.unique_id}}",
                 "created": "{{wall.created}}"
             };
-            var items = [
-                {% for item in wall.items %}'{{item.url}}',
+            var items = {
+                {% for item in wall.items %}{{item.id}}: {
+                    src: '{{item.url}}'
+                },
                 {% endfor %}
-            ]
+            }
         </script>
         <script type="text/javascript">
 

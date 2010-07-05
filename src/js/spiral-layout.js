@@ -45,7 +45,7 @@ function SpiralLayout() {
         area.bottom = item.bottom;
         area.right = item.right;
 
-        // special case: next box diectly to the right moving down
+        // special case: next box directly to the right moving down
         // adding in down direction will add 1 to box expanding edge
         area.last_moving = item.top - 1;
         area.last_inner = item.right + 1;
@@ -175,14 +175,15 @@ function SpiralLayout() {
 
         space: BSPTree(),
 
-        add: function(w, h) {
+        add: function(w, h, k) {
             var item = {
                 top: 0,
                 bottom: 0,
                 left: 0,
                 right: 0,
                 width: w,
-                height: h
+                height: h,
+                key: k
             }
 
             if(this.direction == '') {
@@ -194,6 +195,10 @@ function SpiralLayout() {
             this.space.put(item);
             
             return item;
+        },
+
+        find: function(x, y) {
+            return this.space.find(x, y);
         }
 
     };
