@@ -269,8 +269,9 @@ $(function() {
             'z-index': 1000,
             'position': 'absolute'
         },
-        click: function() {
+        click: function(e) {
             $('input[type="text"]').blur();
+            alert(e.pageX + ' ' + e.pageY);
         },
         mousedown: funcs.startDrag,
         mouseout: funcs.stopDrag,

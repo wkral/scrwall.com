@@ -115,9 +115,22 @@ test('Inserting overlapping boxes', function() {
         tree.put({left: 5, right:15, top: 15, bottom: 25});
         ok(false, 'Failed: expected an exception');
     } catch (e) {
-        equal(e, 'intersecting boxes not supported',
+        ok(e.search('intersecting boxes not supported') >= 0,
             'Caught the exception from overlapping');
     }
+});
+test('Find image at coordinate', function() {
+    var tree = BSPTree();
+    tree.put(b1);
+    tree.put(b2);
+    tree.put(b3);
+    tree.put(b4);
+    same(tree.find(5, 15), b1, 'Found the first box');
+    ok(tree.find(45, 56) == null, 'There is no box here');
+    same(tree.find(17, 23), b4, 'Found the fourth box');
+    same(tree.find(10,10), b2, 'Found the second box by the corner');
+    same(tree.find(10,20), b4, 'Found the fourth box by the corner');
+    same(tree.find(9, 29), b3, 'Found the third box by the corner');
 });
         </script>
     </head>

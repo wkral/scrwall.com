@@ -20,5 +20,10 @@ var boxes = {
     to_string: function(box) {
         return '{ left: ' + box.left + ' right: ' + box.right +
             ' top: ' + box.top + ' bottom:' + box.bottom + '}';
+    },
+
+    contains: function(box, x, y) {
+        return box.top <= y && y <= box.bottom 
+            && box.left <= x && x <= box.right;
     }
 }

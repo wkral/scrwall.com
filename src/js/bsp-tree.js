@@ -123,9 +123,22 @@ function BSPTree() {
     function has_properties() {
         var obj = arguments[0];
         for(var i = 1; i < arguments.length; i++) {
-            if(obj[arguments[i]] == undefined) return false;
+            if(!obj.hasOwnProperty(arguments[i])) return false;
         }
         return true;
+    }
+
+    function find(tree, x, y) {
+        if(is_box(tree)) {
+           return boxes.contains(tree, x, y) ? tree : null;
+        } else if (is_vector(tree)) {
+            if(tree.horizontal) {
+                return find(tree.y <= y ? tree.gt : tree.lt, x, y);
+            } else {
+                return find(tree.x <= x ? tree.gt : tree.lt, x, y);
+            }
+        }
+        throw "tree should only contain vectors or boxes";
     }
 
     return {
@@ -142,6 +155,10 @@ function BSPTree() {
         find_adjacent: function(b) {
             if(this.head == null) return null;
             return find_adj(b, this.head);
+        },
+        find: function(x, y) {
+            if(this.head == null) return null;
+            return find(this.head, x, y);
         }
     };
 }
