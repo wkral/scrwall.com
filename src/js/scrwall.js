@@ -11,7 +11,7 @@ $(window).resize(function() {
 $(function() {
     //pre-cache the image
     new Image().src = '/images/loading_btn.gif';
-
+    try {
     var PADDING = 11;
     var MARGIN = 10;
 
@@ -308,6 +308,9 @@ $(function() {
     $.each(items, function () {
         funcs.addItem(this, funcs.loadExistingImage);
     });
+    } catch (e) {
+        //swallow top level exceptions
+    }
 });
 
 
