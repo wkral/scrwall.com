@@ -277,16 +277,18 @@ $(function() {
         mouseup: funcs.stopDrag,
         mousemove: funcs.drag
     });
-    cover.get(0).addEventListener('mousewheel', function (e) {
-        funcs.move(e.wheelDeltaX / 60, e.wheelDeltaY / 60);
-    }, true);
-    window.addEventListener('DOMMouseScroll', function (e) {
-        if(e.axis == e.HORIZONTAL_AXIS) {
-            funcs.move(e.detail * -3, 0);
-        } else {
-            funcs.move(0, e.detail * -3);
-        }
-    }, true);
+    if(window.addEventListener) {
+        cover.get(0).addEventListener('mousewheel', function (e) {
+            funcs.move(e.wheelDeltaX / 60, e.wheelDeltaY / 60);
+        }, true);
+        window.addEventListener('DOMMouseScroll', function (e) {
+            if(e.axis == e.HORIZONTAL_AXIS) {
+                funcs.move(e.detail * -3, 0);
+            } else {
+                funcs.move(0, e.detail * -3);
+            }
+        }, true);
+    }
 
     body.css('height', (win.height() - $('#header').height()) + 'px');
 
