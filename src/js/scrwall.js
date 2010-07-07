@@ -29,12 +29,19 @@ var wall = {
         items[item.key] = item;
         nav.moveTo(item);
     },
+    deleteItem: function (url) {
+        //TODO pass
+    },
     appendImage: function(img) {
         var image = $(img);
         var key = image.data('key');
         var domItem = $('<div>', {
             'class': 'item',
-            id: 'item' + key
+            id: 'item' + key,
+            
+        }).css({
+            width: img.width + 'px',
+            height: img.height + 'px',
         }).append(image);
 
         var body = $('#body');
@@ -62,6 +69,14 @@ var wall = {
 };
 
 var nav = {
+    itemSelector: null,
+    itemReset: function() {
+        if(nav.itemSelector != null) {
+            $('#body').find('#controls').remove();
+            $(nav.itemSelector).css('z-index', 'auto').find('a').remove();
+            nav.itemSelector = null;
+        }
+    }, 
     stopEvent: function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -107,14 +122,36 @@ var nav = {
             var pos = body.data('position');
             var item = layout.find(e.pageX - pos.offsetX, 
                 e.pageY - body.position().top - pos.offsetY);
+            
             if(item == null) return false;
-            nav.moveTo(items[item.key], function() {
-                alert("end of move");
-                $('#item' + item.key).css('z-index', 2000);
-            });
+            
+            item = items[item.key];
+            nav.moveTo(item, nav.addControls);
         }
+        return nav.stopEvent(e);
+    },
+    addControls: function(item) {
+        var pos = $('#body').data('position');
+        var control_top = this.top + wall.margin + wall.padding + 5 + pos.offsetY;
+        var control_left = this.left + wall.margin + wall.padding + 5 + pos.offsetX;
+
+        // make sure controls are always visible
+        if(control_top < 40) control_top = 40;
+        if(control_left < 10) control_left = 10;
+
+        var controls = $('<div id="controls"><a href="#" class="delete"></a></div>').css({
+            'position': 'absolute',
+            'top': control_top + 'px',
+            'left': control_left + 'px',
+            'z-index': 1501
+        });
+
+        $('#item' + this.key).css('z-index', 1500)
+        $('#body').append(controls);
+        nav.itemSelector = '#item' + this.key;
     },
     move: function(deltaX, deltaY) {
+        nav.itemReset();
         var position = $('#body').data('position');
         position.offsetX += deltaX;
         position.offsetY += deltaY;
@@ -136,7 +173,7 @@ var nav = {
         var deltaX = -centerX - position.offsetX + body.width() / 2;
         var deltaY = -centerY - position.offsetY + body.height() / 2;
 
-        mover.move(deltaX, deltaY, callback);
+        mover.move(deltaX, deltaY, callback, item);
     },
 };
 
@@ -144,11 +181,12 @@ var mover = {
     step: null,
     timeout: null,
     callback: null,
-    move: function(deltaX, deltaY, callback) {
+    move: function(deltaX, deltaY, callback, arg) {
         var stepX = deltaX / 50;
         var stepY = deltaY / 50;
         
         this.callback = callback;
+        this.arg = arg;
         window.clearTimeout(this.timeout);
         this.step = {x: stepX, y: stepY, count: 50};
         this.proceed();
@@ -165,7 +203,7 @@ var mover = {
             if(step.count <= 0) {
                 mover.step = null;
                 if(mover.callback != null) {
-                    mover.callback();
+                    mover.callback.apply(mover.arg);
                 }
             }
             mover.timeout = window.setTimeout(mover.proceed, time);
@@ -204,7 +242,7 @@ $(function() {
     });
 
     // cross browser scrolling
-    cover.get(0).addEventListener('mousewheel', function (e) {
+    window.addEventListener('mousewheel', function (e) {
         mover.cancel();
         nav.move(e.wheelDeltaX / 60, e.wheelDeltaY / 60);
     }, true);
