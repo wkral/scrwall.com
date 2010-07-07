@@ -184,16 +184,19 @@ function SpiralLayout() {
                 width: w,
                 height: h,
                 key: k
-            }
+            };
 
-            if(this.direction == '') {
-                add_center(this, item);
-            } else {
-                add_normal(this, item);
-            }
+            try {
+                if(this.direction == '') {
+                    add_center(this, item);
+                } else {
+                    add_normal(this, item);
+                }
 
-            this.space.put(item);
-            
+                this.space.put(item);
+            } catch (e) {
+                //swallow this error for IE
+            }
             return item;
         },
 

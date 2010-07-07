@@ -241,20 +241,22 @@ $(function() {
         mousemove: nav.drag
     });
 
-    // cross browser scrolling
-    window.addEventListener('mousewheel', function (e) {
-        mover.cancel();
-        nav.move(e.wheelDeltaX / 60, e.wheelDeltaY / 60);
-    }, true);
+    if(window.addEventListener) {
+        // cross browser scrolling
+        window.addEventListener('mousewheel', function (e) {
+            mover.cancel();
+            nav.move(e.wheelDeltaX / 60, e.wheelDeltaY / 60);
+        }, true);
 
-    window.addEventListener('DOMMouseScroll', function (e) {
-        mover.cancel();
-        if(e.axis == e.HORIZONTAL_AXIS) {
-            nav.move(e.detail * -4, 0);
-        } else {
-            nav.move(0, e.detail * -4);
-        }
-    }, true);
+        window.addEventListener('DOMMouseScroll', function (e) {
+            mover.cancel();
+            if(e.axis == e.HORIZONTAL_AXIS) {
+                nav.move(e.detail * -4, 0);
+            } else {
+                nav.move(0, e.detail * -4);
+            }
+        }, true);
+    }
 
     body.css('height', (win.height() - $('#header').height()) + 'px');
 
