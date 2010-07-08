@@ -13,7 +13,7 @@ do
 done
 
 mkdir ${target}/js
-python jscompile.py $source/js/json2.js $source/js/boxes.js $source/js/bsp-tree.js $source/js/spiral-layout.js $source/js/scrwall.js > $target/js/scrwall-min.js
+python jscompile.py $source/js/json2.js $source/js/boxes.js $source/js/bsp-tree.js $source/js/spiral-layout.js $source/js/forms.js $source/js/scrwall.js > $target/js/scrwall-min.js
 python jscompile.py $source/js/json2.js > $target/js/json2-min.js
 
 prodfiles=`ls -1 target/templates/*.prod`

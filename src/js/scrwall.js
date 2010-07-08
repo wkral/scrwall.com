@@ -53,11 +53,10 @@ var wall = {
         var key = image.data('key');
         var domItem = $('<div>', {
             'class': 'item',
-            id: 'item' + key,
-            
+            id: 'item' + key
         }).css({
             width: img.width + 'px',
-            height: img.height + 'px',
+            height: img.height + 'px'
         }).append(image);
 
         var body = $('#body');
@@ -196,7 +195,7 @@ var nav = {
         var deltaY = -centerY - position.offsetY + body.height() / 2;
 
         mover.move(deltaX, deltaY, callback, item);
-    },
+    }
 };
 
 var mover = {
