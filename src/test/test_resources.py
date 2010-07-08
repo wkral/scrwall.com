@@ -68,7 +68,7 @@ class TestWalls():
     def test_put(self):
         response = app.put(self.url, put_json %
             (WALL_NAME + ' Changed', self.wall.unique_id, self.wall.created))
-        assert_status(response, 200)
+        assert_status(response, 204)
         response = app.get(self.url)
         assert_status(response, 200)
         assert WALL_NAME + ' Changed' in response.body, 'expecting wall json'
@@ -82,6 +82,14 @@ class TestWalls():
     def test_bad_put(self):
         response = app.put(self.url, 'This is not json', status=400)
         assert_status(response, 400)
+
+class TestItems():
+    def setup(self):
+        self.wall = walls.create(WALL_NAME)
+        self.item = walls.add_url(self.wall.unique_id, 'http://www.testurl.com')
+        self.url = '/res/collections/%s' % self.wall.unique_id
+    def teardown(self):
+        clean_db()
     def test_post_item(self):
         response = app.post(self.url + '/items', good_item)
         assert_status(response, 201)
@@ -93,6 +101,10 @@ class TestWalls():
     def test_post_bad_item(self):
         response = app.post(self.url + '/items', 'This is not json', status=400)
         assert_status(response, 400)
+    def test_delete_item(self):
+        response = app.delete('%s/items/%d' % (self.url, self.item.id))
+        assert_status(response, 204)
+        assert walls.fetch_item(self.wall.unique_id, self.item.id) == None, 'Item should be gone'
 
 class TestFeedback():
     def setup(self):

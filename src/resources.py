@@ -25,8 +25,9 @@ class ResourceHandler(webapp.RequestHandler):
         self.response.set_status(400, message)
     def respond_not_found(self):
         self.response.set_status(404)
-    def respond_ok(self):
-        self.response.set_status(200)
+    def respond_no_content(self):
+        self.response.set_status(204)
+        del self.response.headers['Content-Type']
 
 def wall_uri(wall):
     return '/res/collections/%s' % wall.unique_id
@@ -63,7 +64,7 @@ class WallResource(ResourceHandler):
             wall.name = wall_obj['name']
             wall.name_set = True
             wall.put()
-            self.respond_ok()
+            self.respond_no_content()
         except ValueError:
             self.respond_bad_request('Request did not contain valid JSON')
 
@@ -79,6 +80,14 @@ class ItemsResource(ResourceHandler):
         except ValueError:
             self.respond_bad_request('Request did not contain valid JSON')
 
+class ItemResource(ResourceHandler):
+    def delete(self, wall_id, item_id):
+        deleted = walls.delete_item(wall_id, int(item_id))
+        if deleted:
+            self.respond_no_content()
+        else:
+            self.respond_not_found()
+
 class FeedbackResource(ResourceHandler):
     def post(self):
         try:
@@ -90,7 +99,7 @@ class FeedbackResource(ResourceHandler):
 
 urls = [
     ('/res/collections/(.*)/items', ItemsResource),
-#    ('/res/collections/(.*)/items/(.*)', ItemResource),
+    ('/res/collections/(.*)/items/(.*)', ItemResource),
     ('/res/collections', WallsResource),
     ('/res/collections/(.*)', WallResource),
     ('/res/feedback', FeedbackResource)

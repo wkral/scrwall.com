@@ -21,6 +21,20 @@ def add_url(id, url):
     else:
         raise ValueError('Must be a well formatted URL')
 
+def delete_item(wall_id, item_id):
+    item = fetch_item(wall_id, item_id)
+    if item:
+        item.delete()
+        return True
+    return False
+
+def fetch_item(wall_id, item_id):
+    wall = fetch(wall_id)
+    if wall:
+        q = WallItem.gql('WHERE wall = :1 and id = :2', wall, item_id)
+        item = q.get()
+        return item
+
 def rename(id, name):
     wall = find(id)
     if wall:
