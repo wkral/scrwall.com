@@ -20,6 +20,10 @@ var wall = {
         image.load(callback);
         image.data('key', key);
     },
+    getItemUrl: function(item) {
+        return '/res/collections/' + current.unique_id 
+            + '/items/' + item.key;
+    },
     loadExistingImage: function() {
         wall.appendImage(this);
     },
@@ -29,8 +33,20 @@ var wall = {
         items[item.key] = item;
         nav.moveTo(item);
     },
-    deleteItem: function (url) {
-        //TODO pass
+    deleteItem: function (item) {
+        $.ajax({
+            type: 'DELETE',
+            'url': wall.getItemUrl(item),
+            success: function() {
+                $('#body').find('#controls').remove();
+                $('#item' + item.key).remove();
+                items[item.key] = null;
+            },
+            error: function() {
+                $('#msgtxt').text('Couldn\'t delete that item, something is up');
+                $('#message').slideDown('fast');
+            }
+        });
     },
     appendImage: function(img) {
         var image = $(img);
@@ -73,7 +89,7 @@ var nav = {
     itemReset: function() {
         if(nav.itemSelector != null) {
             $('#body').find('#controls').remove();
-            $(nav.itemSelector).css('z-index', 'auto').find('a').remove();
+            $(nav.itemSelector).css('z-index', 'auto');
             nav.itemSelector = null;
         }
     }, 
@@ -126,29 +142,35 @@ var nav = {
             if(item == null) return false;
             
             item = items[item.key];
-            nav.moveTo(item, nav.addControls);
+            if(item != null) {
+                nav.moveTo(item, nav.addControls);
+            }
         }
         return nav.stopEvent(e);
     },
     addControls: function(item) {
         var pos = $('#body').data('position');
-        var control_top = this.top + wall.margin + wall.padding + 5 + pos.offsetY;
-        var control_left = this.left + wall.margin + wall.padding + 5 + pos.offsetX;
+        var control_top = item.top + wall.margin + wall.padding + 5 + pos.offsetY;
+        var control_left = item.left + wall.margin + wall.padding + 5 + pos.offsetX;
 
         // make sure controls are always visible
         if(control_top < 40) control_top = 40;
         if(control_left < 10) control_left = 10;
 
-        var controls = $('<div id="controls"><a href="#" class="delete"></a></div>').css({
+        var delete_control = $('<a href="#" class="delete"></a>')
+        delete_control.click(function() {
+            wall.deleteItem(item);
+        });
+        var controls = $('<div id="controls"></div>').css({
             'position': 'absolute',
             'top': control_top + 'px',
             'left': control_left + 'px',
             'z-index': 1501
-        });
+        }).append(delete_control);
 
-        $('#item' + this.key).css('z-index', 1500)
+        $('#item' + item.key).css('z-index', 1500)
         $('#body').append(controls);
-        nav.itemSelector = '#item' + this.key;
+        nav.itemSelector = '#item' + item.key;
     },
     move: function(deltaX, deltaY) {
         nav.itemReset();
@@ -178,17 +200,18 @@ var nav = {
 };
 
 var mover = {
+    step_count: 30,
     step: null,
     timeout: null,
     callback: null,
     move: function(deltaX, deltaY, callback, arg) {
-        var stepX = deltaX / 50;
-        var stepY = deltaY / 50;
+        var stepX = deltaX / this.step_count;
+        var stepY = deltaY / this.step_count;
         
         this.callback = callback;
         this.arg = arg;
         window.clearTimeout(this.timeout);
-        this.step = {x: stepX, y: stepY, count: 50};
+        this.step = {x: stepX, y: stepY, count: this.step_count};
         this.proceed();
     },
     proceed: function() {
@@ -203,7 +226,7 @@ var mover = {
             if(step.count <= 0) {
                 mover.step = null;
                 if(mover.callback != null) {
-                    mover.callback.apply(mover.arg);
+                    mover.callback.call(window, mover.arg);
                 }
             }
             mover.timeout = window.setTimeout(mover.proceed, time);
