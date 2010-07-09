@@ -88,7 +88,7 @@ var nav = {
     itemReset: function() {
         if(nav.itemSelector != null) {
             $('#body').find('#controls').remove();
-            $(nav.itemSelector).css('z-index', 'auto');
+            $(nav.itemSelector).css('z-index', 'auto').removeClass('selected');
             nav.itemSelector = null;
         }
     }, 
@@ -130,6 +130,7 @@ var nav = {
     select: function(e) {
         $('input[type="text"]').blur();
         var body = $('#body');
+        nav.itemReset();
         if(body.data('dragged')) {
             body.data('dragged', false);
         } else {
@@ -167,7 +168,7 @@ var nav = {
             'z-index': 1501
         }).append(delete_control);
 
-        $('#item' + item.key).css('z-index', 1500)
+        $('#item' + item.key).css('z-index', 1500).addClass('selected');
         $('#body').append(controls);
         nav.itemSelector = '#item' + item.key;
     },

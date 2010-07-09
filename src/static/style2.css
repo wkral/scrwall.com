@@ -320,6 +320,11 @@ input[type="text"] {
     display: block;
 }
 
+.item.selected {
+    border: 11px solid #0b7fb1;
+    padding: 0px;
+}
+
 a.delete {
     background: url('/images/delete_btn.png') left top;
     display: block;
