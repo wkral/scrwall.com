@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /* 
-	Background-Styles */
+    Background-Styles */
 
 @font-face {
     font-family: 'LeagueGothicRegular';
@@ -14,8 +14,8 @@
 }
 
 #logo-img {
-	width: 111px;
-	height: 41px;
+    width: 111px;
+    height: 41px;
 }
 
 #overlay {
@@ -37,9 +37,9 @@
     margin: 100px auto;
     padding: 15px;
     font-size: 15px;
-	background: #C7C7C7 url('/images/main_bg.jpg');
+    background: #C7C7C7 url('/images/main_bg.jpg');
     background-repeat: repeat-x;
-	font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     line-height: 22px;
 }
 
@@ -96,118 +96,118 @@ label.long {
 }
 
 a {
-	text-decoration:none;
+    text-decoration:none;
 }
 
 a:hover {
-	text-decoration:underline;
+    text-decoration:underline;
 }
 
 a.navlinks {
-	font-size:18px;
-	color:#b5e9ff;
-	text-transform:uppercase;
-	margin-left: 9px;
+    font-size:18px;
+    color:#b5e9ff;
+    text-transform:uppercase;
+    margin-left: 9px;
 }
 
 a.navlinks:hover {
-	color:#0e3c50;
-	text-shadow: #2babe2 0px 1px 0px;
-	text-decoration: none;
+    color:#0e3c50;
+    text-shadow: #2babe2 0px 1px 0px;
+    text-decoration: none;
 }
 
 .message a:hover {
-	text-decoration:underline;
-	color:#f4f4f4;
+    text-decoration:underline;
+    color:#f4f4f4;
 }
 
 .tagline {
-	color:#d2e9f3;
-	letter-spacing:0px;
-	vertical-align: middle;
+    color:#d2e9f3;
+    letter-spacing:0px;
+    vertical-align: middle;
 }
 
 img.middle {
-	vertical-align:middle;
-	border: 0;
+    vertical-align:middle;
+    border: 0;
 }
 
 body {
-	background-color:#fff;
-	font-family:"LeagueGothicRegular", 'arial narrow', sans-serif, Arial, Helvetica, sans-serif;
-	color:#444;
-	font-size:18px;
-	margin:0;
-	padding:0;
+    background-color:#fff;
+    font-family:"LeagueGothicRegular", 'arial narrow', sans-serif, Arial, Helvetica, sans-serif;
+    color:#444;
+    font-size:18px;
+    margin:0;
+    padding:0;
     overflow: hidden;
 }
 
 #header {
-	height:50px;
-	background-image:url('/images/header_bg.jpg');
-	background-repeat:repeat-x;
-	background-color:#00a1e6;
-	border-bottom-style:solid;
-	border-bottom-width:2px;
-	border-bottom-color:#1491c6;
-	position: fixed;
-	width: 100%;
+    height:50px;
+    background-image:url('/images/header_bg.jpg');
+    background-repeat:repeat-x;
+    background-color:#00a1e6;
+    border-bottom-style:solid;
+    border-bottom-width:2px;
+    border-bottom-color:#1491c6;
+    position: fixed;
+    width: 100%;
     z-index: 2002;
     -webkit-box-shadow: 0px 0px 10px #333;
     -moz-box-shadow: 0px 0px 10px #333;
 }
 
 .container {
-	width:960px;
-	margin:0 auto;
+    width:960px;
+    margin:0 auto;
 }
 
 #logo {
-	width:400px;
-	height:45px;
-	float:left;
-	text-align:left;
-	padding-top:5px;
+    width:400px;
+    height:45px;
+    float:left;
+    text-align:left;
+    padding-top:5px;
 }
 
 #header_nav {
-	float:right;
-	text-align:right;
+    float:right;
+    text-align:right;
     margin-top: 15px;
     height: 20px;
 }
 
 #main {
-	position: fixed;
-	top: 52px;
-	margin: 0 auto;
-	width:960px;
+    position: fixed;
+    top: 52px;
+    margin: 0 auto;
+    width:960px;
     padding: 4px;
-	-moz-border-radius-bottomleft: 10px;
-	-moz-border-radius-bottomright: 10px;
-	-webkit-border-bottom-left-radius: 10px;
-	-webkit-border-bottom-right-radius: 10px;
-	border-top: 0px;
-	border-right: 1px solid #9e9e9e;
-	border-bottom: 1px solid #9e9e9e;
-	border-left: 1px solid #9e9e9e;
-	background: url('/images/main_coll_bg.jpg') left bottom;
-	background-repeat:repeat-x;
+    -moz-border-radius-bottomleft: 10px;
+    -moz-border-radius-bottomright: 10px;
+    -webkit-border-bottom-left-radius: 10px;
+    -webkit-border-bottom-right-radius: 10px;
+    border-top: 0px;
+    border-right: 1px solid #9e9e9e;
+    border-bottom: 1px solid #9e9e9e;
+    border-left: 1px solid #9e9e9e;
+    background: url('/images/main_coll_bg.jpg') left bottom;
+    background-repeat:repeat-x;
     z-index: 2001;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size:14px;
-	color:#f4f4f4;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:14px;
+    color:#f4f4f4;
     -webkit-box-shadow: 0px 0px 10px #555;
     -moz-box-shadow: 0px 0px 10px #555;
-	line-height:22px;
+    line-height:22px;
 }
 
 
 #message{
-	float:left;
-	height:25px;
+    float:left;
+    height:25px;
     width: 940px;
-	padding:1px 10px;
+    padding:1px 10px;
     text-align: center;
     display: none;
 }
@@ -228,35 +228,35 @@ body {
 }
 
 #collname {
-	float:left;
-	width:250px;
-	text-align:left;
+    float:left;
+    width:250px;
+    text-align:left;
     margin-left: 10px;
 }
 
 #imgurl {
-	float: left;
-	text-align: center;
+    float: left;
+    text-align: center;
 }
 
 #collurl {
-	float: right;
-	text-align: right;
+    float: right;
+    text-align: right;
     margin-right: 10px;
 }
 
 #startbtn {
-	float:left;
-	width: 140px;
-	height: 34px;
-	margin-top: 9px;
-	background: url('/images/start_btn_small.png') top center no-repeat; left: 10px;
+    float:left;
+    width: 140px;
+    height: 34px;
+    margin-top: 9px;
+    background: url('/images/start_btn_small.png') top center no-repeat; left: 10px;
     border: none;
     cursor: pointer;
 }
 
 #startbtn:hover {
-	background: url('/images/start_btn_small.png') 0px -40px no-repeat;
+    background: url('/images/start_btn_small.png') 0px -40px no-repeat;
 }
 
 .header-input {
@@ -264,22 +264,22 @@ body {
 }
 
 input[type="text"], textarea {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 13px;
-	border:1px solid #fff;
-	background:#fff url('/images/input_bg.png') no-repeat left top;
-	color:#327fa0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    border:1px solid #fff;
+    background:#fff url('/images/input_bg.png') no-repeat left top;
+    color:#327fa0;
     padding-left: 3px;
     padding-top: 2px;
 }
 
 input[type="text"] {
-	height:20px;
-	width:180px;
+    height:20px;
+    width:180px;
 }
 
 #img-url {
-	width: 410px;
+    width: 410px;
 }
 
 #coll-url {
@@ -287,15 +287,15 @@ input[type="text"] {
 }
 
 .button {
-	font-family: "LeagueGothicRegular", arial narrow, Arial, Helvetica, sans-serif;
-	font-size: 16px;
-	background-color: #3eb2e3;
-	border: 1px solid #1491c6;
-	background: url('/images/input_btn.png') left top no-repeat;
-	width: 36px;
-	height: 25px;
-	color: #fff;
-	padding: 0px;
+    font-family: "LeagueGothicRegular", arial narrow, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    background-color: #3eb2e3;
+    border: 1px solid #1491c6;
+    background: url('/images/input_btn.png') left top no-repeat;
+    width: 36px;
+    height: 25px;
+    color: #fff;
+    padding: 0px;
     margin-left: 3px;
     float: left;
     cursor: pointer;
@@ -321,8 +321,8 @@ input[type="text"] {
 }
 
 .item.selected {
-    border: 11px solid #0b7fb1;
-    padding: 0px;
+    border: 3px solid #0b7fb1;
+    padding: 8px;
 }
 
 a.delete {
