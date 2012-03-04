@@ -21,7 +21,7 @@ var wall = {
         image.data('key', key);
     },
     getItemUrl: function(item) {
-        return '/res/collections/' + current.unique_id 
+        return '/res/collections/' + current.unique_id
             + '/items/' + item.key;
     },
     loadExistingImage: function() {
@@ -91,7 +91,7 @@ var nav = {
             $(nav.itemSelector).css('z-index', 'auto').removeClass('selected');
             nav.itemSelector = null;
         }
-    }, 
+    },
     stopEvent: function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -136,11 +136,11 @@ var nav = {
         } else {
             var layout = body.data('layout');
             var pos = body.data('position');
-            var item = layout.find(e.pageX - pos.offsetX, 
+            var item = layout.find(e.pageX - pos.offsetX,
                 e.pageY - body.position().top - pos.offsetY);
-            
+
             if(item == null) return false;
-            
+
             item = items[item.key];
             if(item != null) {
                 nav.moveTo(item, nav.addControls);
@@ -207,7 +207,7 @@ var mover = {
     move: function(deltaX, deltaY, callback, arg) {
         var stepX = deltaX / this.step_count;
         var stepY = deltaY / this.step_count;
-        
+
         this.callback = callback;
         this.arg = arg;
         window.clearTimeout(this.timeout);
@@ -240,7 +240,7 @@ var mover = {
 $(function() {
     //pre-cache the image
     new Image().src = '/images/loading_btn.gif';
-    
+
     forms.init();
 
     var body = $('#body');
@@ -268,7 +268,7 @@ $(function() {
         // cross browser scrolling
         window.addEventListener('mousewheel', function (e) {
             mover.cancel();
-            nav.move(e.wheelDeltaX / 60, e.wheelDeltaY / 60);
+            nav.move(e.wheelDeltaX / 5, e.wheelDeltaY / 5);
         }, true);
 
         window.addEventListener('DOMMouseScroll', function (e) {
@@ -297,7 +297,7 @@ $(function() {
     });
 
     body.data('layout', SpiralLayout(wall.padding, wall.margin));
-    
+
     $.each(items, function (key, value) {
         wall.addItem(value.src, parseInt(key), wall.loadExistingImage);
     });
